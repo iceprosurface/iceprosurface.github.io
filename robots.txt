@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://iceprosurface.com/sitemap.xml 
+Sitemap: http://iceprosurface.github.io/sitemap.xml 
