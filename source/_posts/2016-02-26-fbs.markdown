@@ -1,0 +1,9 @@
+---
+layout: post
+title: "fbs"
+date: 2016-02-26 01:49:33 +0800
+comments: true
+categories: 
+---
+欢迎访问我的博客
+下面测试各项m表达式是否成功
