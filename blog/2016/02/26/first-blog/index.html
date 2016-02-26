@@ -1,24 +1,96 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[icepro`s Blog]]></title>
-  <link href="http://iceprosurface.com/atom.xml" rel="self"/>
-  <link href="http://iceprosurface.com/"/>
-  <updated>2016-02-26T20:31:01+08:00</updated>
-  <id>http://iceprosurface.com/</id>
-  <author>
-    <name><![CDATA[icepro]]></name>
-    <email><![CDATA[iceprosurface@gmail.com]]></email>
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>[angular.js]第一章 基础知识篇 - icepro`s Blog</title>
+	<meta name="author" content="icepro">
 
+	
+	<meta name="description" content="[angular.js]第一章 基础知识篇 Posted by icepro 重要信息：在阅读该博文前请确保有以下前置知识：1) htm 2) javascript 3) css 一.介绍 为什么我开始学习使用angular.js？这得从知乎大佬的一片文章说起，时间有点久远了，链接是给不出了。 &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="icepro`s Blog" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://iceprosurface.com/blog/2016/02/26/first-blog/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="/javascripts/libs/jquery.min.js"></script>
+	<!-- cant be use in china <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		document.write("<img src='https://avatars.githubusercontent.com/iceprosurface' alt='Profile Picture' style='width: 160px;' />");
+	</script>
+</div>
+<h1><a href="/">icepro`s Blog</a></h1>
+<p class="subtitle">I believe you can do it</p>
+<p class="subtitle"> <a href="mailto:iceprosurface@gmail.com" >iceprosurface@gmail.com</a></p>
+<nav id="main-nav"><ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+		
+		
+		<a class="github" href="https://github.com/iceprosurface" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+<hgroup>
+  <h1><a href="/">icepro`s Blog</a></h1>
   
-  <entry>
-    <title type="html"><![CDATA[[angular.js]第一章 基础知识篇]]></title>
-    <link href="http://iceprosurface.com/blog/2016/02/26/first-blog/"/>
-    <updated>2016-02-26T19:56:38+08:00</updated>
-    <id>http://iceprosurface.com/blog/2016/02/26/first-blog</id>
-    <content type="html"><![CDATA[<blockquote><p>重要信息：在阅读该博文前请确保有以下前置知识：1) htm  2) javascript   3) css</p></blockquote>
+    <h2>I believe you can do it</h2>
+  
+</hgroup>
+
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">[angular.js]第一章 基础知识篇</h1>
+	<hr/>
+	<div class="title-author" style="text-align: right;">
+  
+
+<span class="byline author vcard">Posted by <span class="fn">icepro</span></span>
+</div>
+	<div class="entry-content" itemprop="articleBody"><blockquote><p>重要信息：在阅读该博文前请确保有以下前置知识：1) htm  2) javascript   3) css</p></blockquote>
 
 <h2>一.介绍</h2>
 
@@ -109,7 +181,7 @@
 
 <p>当然我不是很懂这些代码中间是怎么操作的不过我只要知道他能完成什么就行了</p>
 
-<p><img src="http://iceprosurface.com/images/effect.png" alt="效果图" /></p>
+<p><img src="/images/effect.png" alt="效果图" /></p>
 
 <p>看这个就是最后的效果，你可以随意更改内容，他会简单的将input同步到到那个被标记的变量的地方。</p>
 
@@ -163,42 +235,49 @@
 
 
 <p>在注册完所有的控制器模块后。相应的，我们可以简单的在这个控制器的作用范围中使用(标记为ng-controller=&ldquo;HelloController&rdquo;)调用任何在这个控制器中声明的方法和变量。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[第三部分测试代码检测]]></title>
-    <link href="http://iceprosurface.com/blog/2016/02/26/kkes/"/>
-    <updated>2016-02-26T01:56:14+08:00</updated>
-    <id>http://iceprosurface.com/blog/2016/02/26/kkes</id>
-    <content type="html"><![CDATA[<p>sssss</p>
+</div>
 
-<h6>ssss</h6>
+</article>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Here is ruby source code</span>
-</span></code></pre></td></tr></table></div></figure>
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style addthis_16x16_style">
+	
+	
+	
+	<a class="addthis_button_twitter"></a>
+	
+	
+	
+	<a class="addthis_button_compact"></a>
+	<a class="addthis_counter addthis_bubble_style"></a>
+	</div>
+    <script type="text/javascript" src="http://s7.addthis.com/js/300/addthis_widget.js#pubid="></script>
+</div>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[aaaa测试]]></title>
-    <link href="http://iceprosurface.com/blog/2016/02/26/hjs/"/>
-    <updated>2016-02-26T01:55:17+08:00</updated>
-    <id>http://iceprosurface.com/blog/2016/02/26/hjs</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[fbs]]></title>
-    <link href="http://iceprosurface.com/blog/2016/02/26/fbs/"/>
-    <updated>2016-02-26T01:49:33+08:00</updated>
-    <id>http://iceprosurface.com/blog/2016/02/26/fbs</id>
-    <content type="html"><![CDATA[<p>欢迎访问我的博客
-下面测试各项m表达式是否成功</p>
-]]></content>
-  </entry>
-  
-</feed>
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright &copy; 2016 - icepro -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+			<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+
+		</div>
+	</div>
+</body>
+</html>
