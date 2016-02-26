@@ -4,7 +4,7 @@
   <title><![CDATA[icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-02-26T18:17:12+08:00</updated>
+  <updated>2016-02-26T18:19:20+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -61,7 +61,7 @@ public class MainClass extends JFrame {
 
 <p>{\% endcodeblock \%}</p>
 
-<p>´´´
+<p>´´´ java
 import java.awt.<em>;
 import javax.swing.</em>;</p>
 
