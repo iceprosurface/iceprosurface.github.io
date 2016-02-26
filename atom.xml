@@ -4,7 +4,7 @@
   <title><![CDATA[icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-02-26T17:47:08+08:00</updated>
+  <updated>2016-02-26T18:09:58+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -22,11 +22,14 @@
 
 <h6>ssss</h6>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> java
-</span><span class='line'>public class sss{}</span></code></pre></td></tr></table></div></figure>
+<p>´´´ ruby
+class Fixnum
+  def prime?
+    (&lsquo;1&rsquo; * self) !~ /^1?$|^(11+?)\1+$/
+  end
+end</p>
 
+<p>´´´</p>
 ]]></content>
   </entry>
   
