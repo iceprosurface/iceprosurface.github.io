@@ -4,7 +4,7 @@
   <title><![CDATA[icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-02-26T18:20:15+08:00</updated>
+  <updated>2016-02-26T18:39:32+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -22,43 +22,10 @@
 
 <h6>ssss</h6>
 
-<p>´´´ java
-import java.awt.<em>;
-import javax.swing.</em>;</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Here is ruby source code</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>@SuppressWarnings(&ldquo;serial&rdquo;)
-public class MainClass extends JFrame {
- ControlSnake control;</p>
-
-<p> Toolkit kit;</p>
-
-<p> Dimension dimen;</p>
-
-<p> public static void main(String[] args) {
-  new MainClass(&ldquo;my snake&rdquo;);
- }</p>
-
-<p> public MainClass(String s) {
-  super(s);
-  control = new ControlSnake();
-  control.setFocusable(true);
-  kit = Toolkit.getDefaultToolkit();
-  dimen = kit.getScreenSize();</p>
-
-<p>  add(control);
-  setLayout(new BorderLayout());
-  setLocation(dimen.width / 3, dimen.height / 3);// dimen.width/3,dimen.height/3
-  setSize(FWIDTH, FHEIGHT);
-  setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  setResizable(false);
-  setVisible(true);
- }</p>
-
-<p> public static final int FWIDTH = 315;</p>
-
-<p> public static final int FHEIGHT = 380;
-}
-´´´</p>
 ]]></content>
   </entry>
   
