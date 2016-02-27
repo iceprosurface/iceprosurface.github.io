@@ -4,7 +4,7 @@
   <title><![CDATA[icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-02-27T14:02:19+08:00</updated>
+  <updated>2016-02-27T14:39:44+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[angular 2nd]]></title>
+    <link href="http://iceprosurface.com/blog/2016/02/27/angular-2nd/"/>
+    <updated>2016-02-27T14:39:34+08:00</updated>
+    <id>http://iceprosurface.com/blog/2016/02/27/angular-2nd</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[[Octopress]基础指引]]></title>
@@ -37,6 +46,9 @@
 对于前两个我有着大量的使用经验，从最开始简单的js写了大量的代码完成一个精美漂亮的照片墙（高仿版），到jquery数行代码结合插件快速完成开发，这些过程有着大量的成就感，但是随着越来越多的应用开发使用（其实只是自己做着玩的东西），发现随着应用逻辑的快速增长，代码越来越长直到最后难以维护，大量重复冗余的代码堆积，然后就学习了原型方法，使用各种模型方法来简化代码，增加复用，现在，有一个大佬告诉了我一个新的解决方案&ndash;angular.js
 记得学java的时候有一个很不错的特性&ndash;依赖注入（ioc），没记错的话这是一种被称为AOP面切面的编程思想，具体怎么样早就忘记了，据说angular.js就可以做到这种操作具体的将就是
 <code>反正我不用考虑程序是怎么完成操作的，我只需要完成程序预定的接口就可以完成具体的操作。</code></p>
+
+<!--more-->
+
 
 <h2>二.配置angular.js环境</h2>
 

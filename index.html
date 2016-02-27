@@ -7,7 +7,7 @@
 	<meta name="author" content="icepro">
 
 	
-	<meta name="description" content="[Octopress]基础指引 [angular.js]第一章 基础知识篇 重要信息：在阅读该博文前请确保有以下前置知识：1) htm 2) javascript 3) css 一.介绍 为什么我开始学习使用angular.js？这得从知乎大佬的一片文章说起，时间有点久远了，链接是给不出了。 &hellip;">
+	<meta name="description" content="Angular 2nd [Octopress]基础指引 [angular.js]第一章 基础知识篇 重要信息：在阅读该博文前请确保有以下前置知识：1) htm 2) javascript 3) css 一.介绍 为什么我开始学习使用angular.js？这得从知乎大佬的一片文章说起， &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -100,6 +100,37 @@
   
 
 
+<time datetime="2016-02-27T14:39:34+08:00" data-updated="true" itemprop="datePublished"></time></div>
+		<div class="tags">
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2016/02/27/angular-2nd/" itemprop="url">Angular 2nd</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		
+
+		
+		
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
 <time datetime="2016-02-27T13:40:54+08:00" data-updated="true" itemprop="datePublished"></time></div>
 		<div class="tags">
 
@@ -150,143 +181,9 @@
 记得学java的时候有一个很不错的特性&ndash;依赖注入（ioc），没记错的话这是一种被称为AOP面切面的编程思想，具体怎么样早就忘记了，据说angular.js就可以做到这种操作具体的将就是
 <code>反正我不用考虑程序是怎么完成操作的，我只需要完成程序预定的接口就可以完成具体的操作。</code></p>
 
-<h2>二.配置angular.js环境</h2>
-
-<hr />
-
-<p>讲道理其实并不需要什么配置，我们需要做的是跑到github上下载就好，也可以直接从google上下载，百度上下载都可以,也可以下载本站的内容</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./angular.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>三.第一个helloworld程序</h2>
-
-<hr />
-
-<p>不论任何语言，第一条永远都是创建一个helloworld程序</p>
-
-<p>首先，我们需要准备以下几个文件：</p>
-
-<ul>
-<li>hello.html</li>
-<li>controllers.js</li>
-<li>angular.min.js</li>
-</ul>
-
-
-<p>随后我们需要编辑上述的第一个和第二个文件</p>
-
-<figure class='code'><figcaption><span>hello.html </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;!doctype html&gt;</span>
-</span><span class='line'><span class="nt">&lt;html</span> <span class="na">ng-app=</span><span class="s">&quot;HelloApp&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;head&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./angular.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./controllers.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/head&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;body&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">ng-controller=</span><span class="s">&quot;HelloController&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;label&gt;</span>Name:<span class="nt">&lt;/label&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;meeting.text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Enter a name here&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;hr&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;h1&gt;</span>Hello !<span class="nt">&lt;/h1&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/body&gt;</span>
-</span><span class='line'><span class="nt">&lt;/html&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>controllers.js </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">HelloModule</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;HelloApp&#39;</span><span class="p">,</span> <span class="p">[]);</span>
-</span><span class='line'><span class="nx">HelloModule</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s2">&quot;HelloController&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">){</span>
-</span><span class='line'><span class="nx">$scope</span><span class="p">.</span><span class="nx">meeting</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;text&#39;</span><span class="o">:</span><span class="s1">&#39;icepro&#39;</span><span class="p">};</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>当然我不是很懂这些代码中间是怎么操作的不过我只要知道他能完成什么就行了</p>
-
-<p><img src="/images/effect.png" alt="效果图" /></p>
-
-<p>看这个就是最后的效果，你可以随意更改内容，他会简单的将input同步到到那个被标记的变量的地方。</p>
-
-<p>是不是发现什么诀窍了？对！使用这个我们不需要再去考虑繁琐的dom元素操作了，在这之前，我们可能需要在div上设置一系列的id，用jquery+原生js取子元素，获取<P>的html属性然后修改。而现在不需要了！</p>
-
-<h2>四.例子详解</h2>
-
-<hr />
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;html</span> <span class="na">ng-app=</span><span class="s">&quot;HelloApp&quot;</span><span class="nt">&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>首先我们将ng-app绑定到了html元素上,这个属性是用来声明angular程序的边界的，这里的边界就是整个html标签，当然了你也可以这么设置：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>……
-</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">ng-app=</span><span class="s">&quot;HelloApp&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  ……
-</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>……
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样就把程序设定为该个div以内，保证不影响其他的dom元素。
-然后就是controller元件，angular.js同许多后台框架一样，拥有层次较为清晰的mvc架构。
-所以有一个controller也是理所应当的。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'> <span class="kd">var</span> <span class="nx">HelloModule</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;HelloApp&#39;</span><span class="p">,</span> <span class="p">[]);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这里我比较倾向于称为实例化一个helloapp模块，简单的将就是调用angular生成了一个helloapp模块，这里的我没有看过源码比较大的可能就是直接把一个原始模块的prototype方法直接赋予了这个controller，这样就在全局作用中注册了这模块。
-随后我们在这个模块中注册了名为hellocontroller的控制器。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">HelloModule</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s2">&quot;HelloController&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">){</span>
-</span><span class='line'>        <span class="nx">$scope</span><span class="p">.</span><span class="nx">meeting</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;text&#39;</span><span class="o">:</span><span class="s1">&#39;hi&#39;</span><span class="p">};</span>
-</span><span class='line'>    <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在注册完所有的控制器模块后。相应的，我们可以简单的在这个控制器的作用范围中使用(标记为ng-controller=&ldquo;HelloController&rdquo;)调用任何在这个控制器中声明的方法和变量。</p>
 
 		
-		
+		<a href="/blog/2016/02/26/angular-1st/" class="more-link">Read on &rarr;</a>
 	</div>
 
 </article>
