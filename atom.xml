@@ -4,7 +4,7 @@
   <title><![CDATA[icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-02-27T18:48:29+08:00</updated>
+  <updated>2016-02-27T19:12:08+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -53,13 +53,18 @@
 
 
 <p>由于Octopress是基于jekyll的，所以首先我们要安装关于jekyll的相关依赖
-那么你需要安装以下所有的软件
-  * ruby
-  * python
-  * DevKit
-  * gem
-  * git
-再次之中你可能会碰到各种个样的问题，不过这些多数是系统变量设置的问题，这些问题都可以经过百度快速解决，so，本文将不对此处做出详细解释。
+那么你需要安装以下所有的软件</p>
+
+<ul>
+<li>ruby</li>
+<li>python</li>
+<li>DevKit</li>
+<li>gem</li>
+<li>git</li>
+</ul>
+
+
+<p>再次之中你可能会碰到各种个样的问题，不过这些多数是系统变量设置的问题，这些问题都可以经过百度快速解决，so，本文将不对此处做出详细解释。
 你可能会发现在国内使用gem源大多有点问题，可能是没有办法使用的。
 这样我们可能需要改几个CDN源位置，具体可以到各自的官网去查询，这里我使用的是淘宝源</p>
 
@@ -204,7 +209,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>这样就ok了</p>
+<p>这样就ok了，你可以开始使用markdown语言写文章了</p>
 ]]></content>
   </entry>
   
