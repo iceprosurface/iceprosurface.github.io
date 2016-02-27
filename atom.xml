@@ -4,7 +4,7 @@
   <title><![CDATA[icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-02-26T20:35:38+08:00</updated>
+  <updated>2016-02-27T14:02:19+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -14,10 +14,19 @@
 
   
   <entry>
+    <title type="html"><![CDATA[[Octopress]基础指引]]></title>
+    <link href="http://iceprosurface.com/blog/2016/02/27/octopress-base/"/>
+    <updated>2016-02-27T13:40:54+08:00</updated>
+    <id>http://iceprosurface.com/blog/2016/02/27/octopress-base</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[[angular.js]第一章 基础知识篇]]></title>
-    <link href="http://iceprosurface.com/blog/2016/02/26/first-blog/"/>
+    <link href="http://iceprosurface.com/blog/2016/02/26/angular-1st/"/>
     <updated>2016-02-26T19:56:38+08:00</updated>
-    <id>http://iceprosurface.com/blog/2016/02/26/first-blog</id>
+    <id>http://iceprosurface.com/blog/2016/02/26/angular-1st</id>
     <content type="html"><![CDATA[<blockquote><p>重要信息：在阅读该博文前请确保有以下前置知识：1) htm  2) javascript   3) css</p></blockquote>
 
 <h2>一.介绍</h2>
@@ -113,7 +122,7 @@
 
 <p>看这个就是最后的效果，你可以随意更改内容，他会简单的将input同步到到那个被标记的变量的地方。</p>
 
-<p>是不是发现什么诀窍了？对！使用这个我们需要再去考虑繁琐的dom元素操作了，在这之前，我们可能需要在div上设置一系列的id，用jquery+原生js取子元素，获取<P>的html属性然后修改。而现在不需要了！</p>
+<p>是不是发现什么诀窍了？对！使用这个我们不需要再去考虑繁琐的dom元素操作了，在这之前，我们可能需要在div上设置一系列的id，用jquery+原生js取子元素，获取<P>的html属性然后修改。而现在不需要了！</p>
 
 <h2>四.例子详解</h2>
 
@@ -144,7 +153,7 @@
 所以有一个controller也是理所应当的。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'> var HelloModule = angular.module(&#39;HelloApp&#39;, []);
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'> <span class="kd">var</span> <span class="nx">HelloModule</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;HelloApp&#39;</span><span class="p">,</span> <span class="p">[]);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -155,49 +164,14 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>HelloModule.controller(&quot;HelloController&quot;,
-</span><span class='line'>    function($scope){
-</span><span class='line'>        $scope.meeting={&#39;text&#39;:&#39;hi&#39;};
-</span><span class='line'>    });
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">HelloModule</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s2">&quot;HelloController&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">){</span>
+</span><span class='line'>        <span class="nx">$scope</span><span class="p">.</span><span class="nx">meeting</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;text&#39;</span><span class="o">:</span><span class="s1">&#39;hi&#39;</span><span class="p">};</span>
+</span><span class='line'>    <span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>在注册完所有的控制器模块后。相应的，我们可以简单的在这个控制器的作用范围中使用(标记为ng-controller=&ldquo;HelloController&rdquo;)调用任何在这个控制器中声明的方法和变量。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[第三部分测试代码检测]]></title>
-    <link href="http://iceprosurface.com/blog/2016/02/26/kkes/"/>
-    <updated>2016-02-26T01:56:14+08:00</updated>
-    <id>http://iceprosurface.com/blog/2016/02/26/kkes</id>
-    <content type="html"><![CDATA[<p>sssss</p>
-
-<h6>ssss</h6>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Here is ruby source code</span>
-</span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[aaaa测试]]></title>
-    <link href="http://iceprosurface.com/blog/2016/02/26/hjs/"/>
-    <updated>2016-02-26T01:55:17+08:00</updated>
-    <id>http://iceprosurface.com/blog/2016/02/26/hjs</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[fbs]]></title>
-    <link href="http://iceprosurface.com/blog/2016/02/26/fbs/"/>
-    <updated>2016-02-26T01:49:33+08:00</updated>
-    <id>http://iceprosurface.com/blog/2016/02/26/fbs</id>
-    <content type="html"><![CDATA[<p>欢迎访问我的博客
-下面测试各项m表达式是否成功</p>
 ]]></content>
   </entry>
   

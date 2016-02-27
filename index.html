@@ -7,7 +7,7 @@
 	<meta name="author" content="icepro">
 
 	
-	<meta name="description" content="[angular.js]第一章 基础知识篇 重要信息：在阅读该博文前请确保有以下前置知识：1) htm 2) javascript 3) css 一.介绍 为什么我开始学习使用angular.js？这得从知乎大佬的一片文章说起，时间有点久远了，链接是给不出了。这里大致说一下，大意就是， &hellip;">
+	<meta name="description" content="[Octopress]基础指引 [angular.js]第一章 基础知识篇 重要信息：在阅读该博文前请确保有以下前置知识：1) htm 2) javascript 3) css 一.介绍 为什么我开始学习使用angular.js？这得从知乎大佬的一片文章说起，时间有点久远了，链接是给不出了。 &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -100,13 +100,44 @@
   
 
 
+<time datetime="2016-02-27T13:40:54+08:00" data-updated="true" itemprop="datePublished"></time></div>
+		<div class="tags">
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2016/02/27/octopress-base/" itemprop="url">[Octopress]基础指引</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		
+
+		
+		
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
 <time datetime="2016-02-26T19:56:38+08:00" data-updated="true" itemprop="datePublished"></time></div>
 		<div class="tags">
 
 </div>
 		
 	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2016/02/26/first-blog/" itemprop="url">[angular.js]第一章 基础知识篇</a></h1>
+	<h1 class="title" itemprop="name"><a href="/blog/2016/02/26/angular-1st/" itemprop="url">[angular.js]第一章 基础知识篇</a></h1>
 	<div class="entry-content" itemprop="articleBody">
 		<blockquote><p>重要信息：在阅读该博文前请确保有以下前置知识：1) htm  2) javascript   3) css</p></blockquote>
 
@@ -203,7 +234,7 @@
 
 <p>看这个就是最后的效果，你可以随意更改内容，他会简单的将input同步到到那个被标记的变量的地方。</p>
 
-<p>是不是发现什么诀窍了？对！使用这个我们需要再去考虑繁琐的dom元素操作了，在这之前，我们可能需要在div上设置一系列的id，用jquery+原生js取子元素，获取<P>的html属性然后修改。而现在不需要了！</p>
+<p>是不是发现什么诀窍了？对！使用这个我们不需要再去考虑繁琐的dom元素操作了，在这之前，我们可能需要在div上设置一系列的id，用jquery+原生js取子元素，获取<P>的html属性然后修改。而现在不需要了！</p>
 
 <h2>四.例子详解</h2>
 
@@ -234,7 +265,7 @@
 所以有一个controller也是理所应当的。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'> var HelloModule = angular.module(&#39;HelloApp&#39;, []);
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'> <span class="kd">var</span> <span class="nx">HelloModule</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;HelloApp&#39;</span><span class="p">,</span> <span class="p">[]);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -245,115 +276,14 @@
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>HelloModule.controller(&quot;HelloController&quot;,
-</span><span class='line'>    function($scope){
-</span><span class='line'>        $scope.meeting={&#39;text&#39;:&#39;hi&#39;};
-</span><span class='line'>    });
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">HelloModule</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s2">&quot;HelloController&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">){</span>
+</span><span class='line'>        <span class="nx">$scope</span><span class="p">.</span><span class="nx">meeting</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;text&#39;</span><span class="o">:</span><span class="s1">&#39;hi&#39;</span><span class="p">};</span>
+</span><span class='line'>    <span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>在注册完所有的控制器模块后。相应的，我们可以简单的在这个控制器的作用范围中使用(标记为ng-controller=&ldquo;HelloController&rdquo;)调用任何在这个控制器中声明的方法和变量。</p>
-
-		
-		
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2016-02-26T01:56:14+08:00" data-updated="true" itemprop="datePublished"></time></div>
-		<div class="tags">
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2016/02/26/kkes/" itemprop="url">第三部分测试代码检测</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>sssss</p>
-
-<h6>ssss</h6>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Here is ruby source code</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-		
-		
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2016-02-26T01:55:17+08:00" data-updated="true" itemprop="datePublished"></time></div>
-		<div class="tags">
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2016/02/26/hjs/" itemprop="url">Aaaa测试</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		
-
-		
-		
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2016-02-26T01:49:33+08:00" data-updated="true" itemprop="datePublished"></time></div>
-		<div class="tags">
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2016/02/26/fbs/" itemprop="url">Fbs</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>欢迎访问我的博客
-下面测试各项m表达式是否成功</p>
 
 		
 		
