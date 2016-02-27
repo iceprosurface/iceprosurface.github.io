@@ -4,7 +4,7 @@
   <title><![CDATA[icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-02-27T18:44:46+08:00</updated>
+  <updated>2016-02-27T18:46:24+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -86,7 +86,7 @@
 <p>首先它不支持中文，我们先要添加中文支持
 \lib\ruby\gems(version)\gems\jekyll-(version)\lib\jekyll\</p>
 
-<figure class='code'><figcaption><span>convertible.rb lang="rb" </span></figcaption>
+<figure class='code'><figcaption><span>convertible.rb </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="nb">name</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
