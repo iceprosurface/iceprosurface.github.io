@@ -1,0 +1,1080 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Angular | icepro`s Blog]]></title>
+  <link href="http://iceprosurface.com/blog/categories/angular/atom.xml" rel="self"/>
+  <link href="http://iceprosurface.com/"/>
+  <updated>2016-02-29T22:47:15+08:00</updated>
+  <id>http://iceprosurface.com/</id>
+  <author>
+    <name><![CDATA[icepro]]></name>
+    <email><![CDATA[iceprosurface@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[[angular.js]第二章 一个简单的购物车范例(1)]]></title>
+    <link href="http://iceprosurface.com/blog/2016/02/27/angular-2nd/"/>
+    <updated>2016-02-27T14:39:34+08:00</updated>
+    <id>http://iceprosurface.com/blog/2016/02/27/angular-2nd</id>
+    <content type="html"><![CDATA[<blockquote><p>千里之行，始于足下</p></blockquote>
+
+<h1>angular.js 基础范例简单购物车</h1>
+
+<h2>设计思路</h2>
+
+<p>首先我们需要从mvc上对本次购物车实例进行分析</p>
+
+<ul>
+<li>模型</li>
+<li>视图（也可以叫模板）</li>
+<li>控制器</li>
+</ul>
+
+
+<h2>模型</h2>
+
+<p>首先值得分析的是模型：</p>
+
+<p>每一个购物车都需要以下属性</p>
+
+<ul>
+<li>id（这个唯一的属性将会被持久化到服务器，并作为购物的唯一标识）</li>
+<li>物品
+
+<ul>
+<li>物品ID （这个唯一的属性将会被用来标示物品）</li>
+<li>物品名称</li>
+<li>物品数量</li>
+<li>物品价格</li>
+<li>物品的优惠和折扣
+
+<ul>
+<li>优惠</li>
+<li>折扣</li>
+</ul>
+</li>
+<li>物品的来源(记录来源的ID)</li>
+</ul>
+</li>
+<li>提交日期</li>
+<li>总价格
+
+<ul>
+<li>物品原价</li>
+<li>折扣后价格</li>
+</ul>
+</li>
+</ul>
+
+
+<!--more-->
+
+
+<p>我们还需要商品的列表大抵应该是这样的，和上面的商品没啥差别就是少了一个数量而已</p>
+
+<ul>
+<li>商品
+
+<ul>
+<li>物品ID （这个唯一的属性将会被用来标示物品）</li>
+<li>物品名称</li>
+<li>物品价格</li>
+<li>物品的优惠和折扣
+
+<ul>
+<li>优惠</li>
+<li>折扣</li>
+</ul>
+</li>
+<li>物品的来源
+
+<ul>
+<li>商店的名称</li>
+<li>商店的id（就是上面的来源id）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<p>就这么多啦，服务端的操作我们不需要考虑，so为了不从服务器获取数据这里我们手动构建一下数据列表(这个是在购买前有的列表)</p>
+
+<p><figure class='code'><figcaption><span>cart.json </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="err">&amp;lsquo;id&amp;rsquo;:</span> <span class="err">&amp;lsquo;shop_123456789&amp;rsquo;,</span>
+</span><span class='line'>    <span class="err">&amp;lsquo;items&amp;rsquo;:</span>
+</span><span class='line'>        <span class="err">{</span>
+</span><span class='line'>            <span class="err">&amp;lsquo;ks-11782&amp;rsquo;:</span> <span class="err">{</span>
+</span><span class='line'>                <span class="err">&amp;lsquo;id&amp;rsquo;:&amp;lsquo;ks-11782&amp;rsquo;,</span>
+</span><span class='line'>                <span class="err">&amp;lsquo;name&amp;rsquo;:</span> <span class="err">&amp;lsquo;甜味饼干&amp;rsquo;,</span>
+</span><span class='line'>                <span class="err">&amp;lsquo;mount&amp;rsquo;:</span> <span class="err">13,</span>
+</span><span class='line'>                <span class="err">&amp;lsquo;price&amp;rsquo;:</span> <span class="err">23.5,</span>
+</span><span class='line'>                <span class="err">&amp;lsquo;discount&amp;rsquo;:</span> <span class="err">0.93,</span>
+</span><span class='line'>                <span class="err">&amp;lsquo;preferentialPrice&amp;rsquo;:</span> <span class="err">1,</span>
+</span><span class='line'>                <span class="err">&amp;lsquo;from&amp;rsquo;:&amp;lsquo;xd-123441&amp;rsquo;</span>
+</span><span class='line'>            <span class="p">}</span><span class="err">,</span>
+</span><span class='line'>            <span class="err">&amp;lsquo;ks</span><span class="mi">-213331</span><span class="err">&amp;rsquo;:</span> <span class="p">{</span>
+</span><span class='line'>                <span class="err">&amp;lsquo;id&amp;rsquo;:&amp;lsquo;ks-213331&amp;rsquo;,</span>
+</span><span class='line'>                <span class="err">&amp;lsquo;name&amp;rsquo;:</span> <span class="err">&amp;lsquo;巧克力威化饼干&amp;rsquo;,</span>
+</span><span class='line'>                <span class="err">&amp;lsquo;mount&amp;rsquo;:</span> <span class="err">7,</span>
+</span><span class='line'>                <span class="err">&amp;lsquo;price&amp;rsquo;:</span> <span class="err">17.1,</span>
+</span><span class='line'>                <span class="err">&amp;lsquo;discount&amp;rsquo;:</span> <span class="err">0.93,</span>
+</span><span class='line'>                <span class="err">&amp;lsquo;preferentialPrice&amp;rsquo;:</span> <span class="err">1,</span>
+</span><span class='line'>                <span class="err">&amp;lsquo;from&amp;rsquo;:&amp;lsquo;xd-12345523&amp;rsquo;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="err">}</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>是的你没有看错，我们伟大的网点当当一号店可以同时购买传说中的京东和淘宝的东东,我们大概意思一下给个三个就好了，至于图片详情什么的，就不加入了，简单的变量替换而已</p>
+
+<p><figure class='code'><figcaption><span>list.json </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="err">&amp;lsquo;ks-11782&amp;rsquo;:</span> <span class="err">{</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;id&amp;rsquo;:&amp;lsquo;ks-11782&amp;rsquo;,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;name&amp;rsquo;:</span> <span class="err">&amp;lsquo;甜味饼干&amp;rsquo;,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;price&amp;rsquo;:</span> <span class="err">23.5,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;discount&amp;rsquo;:</span> <span class="err">93,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;mount&amp;rsquo;:</span> <span class="err">1,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;preferentialPrice&amp;rsquo;:</span> <span class="err">1,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;from&amp;rsquo;:</span> <span class="err">{</span>
+</span><span class='line'>            <span class="err">&amp;lsquo;id&amp;rsquo;:</span> <span class="err">&amp;lsquo;xd-123441&amp;rsquo;,</span>
+</span><span class='line'>            <span class="err">&amp;lsquo;name&amp;rsquo;:</span> <span class="err">&amp;lsquo;京东官方旗舰店&amp;rsquo;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="err">},</span>
+</span><span class='line'>    <span class="err">&amp;lsquo;ks</span><span class="mi">-213331</span><span class="err">&amp;rsquo;:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;id&amp;rsquo;:&amp;lsquo;ks-213331&amp;rsquo;,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;name&amp;rsquo;:</span> <span class="err">&amp;lsquo;巧克力威化饼干&amp;rsquo;,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;price&amp;rsquo;:23.5,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;discount&amp;rsquo;:93,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;mount&amp;rsquo;:</span> <span class="err">1,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;preferentialPrice&amp;rsquo;:</span> <span class="err">0.23,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;from&amp;rsquo;:</span> <span class="err">{</span>
+</span><span class='line'>            <span class="err">&amp;lsquo;id&amp;rsquo;:</span> <span class="err">&amp;lsquo;xd-12345523&amp;rsquo;,</span>
+</span><span class='line'>            <span class="err">&amp;lsquo;name&amp;rsquo;:</span> <span class="err">&amp;lsquo;淘宝官方旗舰店&amp;rsquo;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="err">},</span>
+</span><span class='line'>    <span class="err">&amp;lsquo;ks</span><span class="mi">-123123</span><span class="err">&amp;rsquo;:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;id&amp;rsquo;:&amp;lsquo;ks-123123&amp;rsquo;,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;name&amp;rsquo;:</span> <span class="err">&amp;lsquo;巧克力&amp;rsquo;,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;price&amp;rsquo;:</span> <span class="err">33.5,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;discount&amp;rsquo;:</span> <span class="err">97,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;mount&amp;rsquo;:</span> <span class="err">1,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;preferentialPrice&amp;rsquo;:</span> <span class="err">&amp;lsquo;0.77&amp;rsquo;,</span>
+</span><span class='line'>        <span class="err">&amp;lsquo;from&amp;rsquo;:</span> <span class="err">{</span>
+</span><span class='line'>            <span class="err">&amp;lsquo;id&amp;rsquo;:</span> <span class="err">&amp;lsquo;xd-12345523&amp;rsquo;,</span>
+</span><span class='line'>            <span class="err">&amp;lsquo;name&amp;rsquo;:</span> <span class="err">&amp;lsquo;淘宝官方旗舰店&amp;rsquo;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="err">}</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>业务逻辑设计（控制器设计）</h2>
+
+<p>  好的我们现在还不需要设计什么代码功能，现在需要搞清楚我们需要干什么</p>
+
+<p>  现在先看看我们的客户会做些什么？</p>
+
+<ol>
+<li>打开网站</li>
+<li>选择商品</li>
+<li>点击商品</li>
+<li>选择数量（或者不选择）</li>
+<li>加入购物车</li>
+<li>结算</li>
+<li>补加商品数量（可选）</li>
+<li>自动补全总价</li>
+<li>结算</li>
+</ol>
+
+
+<p>  好了好了！我们不需要更多了吗，业务就需要这么多了，那么现在可以开始构建我们的页面了</p>
+
+<h2>视图（模板）设计</h2>
+
+<p>  现在要设计我们的主页了，我想这并不困难，首先确定一下我们需要哪些页面好了！</p>
+
+<p>  需要的页面如下：</p>
+
+<ul>
+<li>商品总览页面</li>
+<li>商品细则页面</li>
+<li>购物车页面</li>
+<li>结算页面</li>
+</ul>
+
+
+<p>  不过这显然太多了，上面三个页面完全可以放在一个页面上</p>
+
+<ul>
+<li>浏览页面
+
+<ul>
+<li>商品总览列表</li>
+<li>商品详细边栏</li>
+<li>购物车边栏</li>
+</ul>
+</li>
+<li>结算页面</li>
+</ul>
+
+
+<p>  ok！大功告成，我们的设计完成了，下面该写代码！</p>
+
+<h2>视图代码编写</h2>
+
+<pre><code>现在第一点我们需要先创建两个页面：
+
+- first.page(-不应该是index！-不不不个人爱好)
+- closingCost
+
+讲道理自己设计css可不是我擅长的事情，css方面嘛，大可忽略，直接上bootstrap就好，我这里就只是练习一下，写的难看一点别介意。
+</code></pre>
+
+<h2>外层div和基本框架</h2>
+
+<p>  我们希望整个页面都被我们的cartapp托管，所以直接在html标签处加上</p>
+
+<blockquote><p>ng-app=&ldquo;CartApp&rdquo;</p></blockquote>
+
+<p>  我们希望在页面的正文处开始使用<em>shoplist</em>的控制器来托管我们的属性，所以我在被标记为</p>
+
+<blockquote><p>class=&ldquo;body&rdquo;</p></blockquote>
+
+<p>  的地方加上控制器</p>
+
+<blockquote><p>ng-controller=&ldquo;ShopListController&rdquo;</p></blockquote>
+
+<p>  好，我们在引入各个js类库和angular框架，顺便带上我们后面会使用的controller控制器</p>
+
+<p>  完整代码如下：</p>
+
+<p><figure class='code'><figcaption><span>first.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;html</span> <span class="na">ng-app=</span><span class="s">&quot;CartApp&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;head&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">”viewport”</span> <span class="na">content=</span><span class="s">”width=device-width,</span> <span class="na">initial-scale=</span><span class="s">1″</span> <span class="nt">/&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content=</span><span class="s">&quot;text/html;charset=UTF-8&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./angular.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./controllers.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./jquery-2.1.4.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/head&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;body&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;body&quot;</span> <span class="na">ng-controller=</span><span class="s">&quot;ShopListController&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;pre&gt;&lt;code&gt;</span><span class="ni">&amp;lt;</span>/div<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<blockquote><p>现在我们需要在正文处加上我们的布局了，我希望在这里用大约45%的空间实现列表，和55%的空间显示详细情况，具体的css先不考虑，但是这里必然有浮动。
+首先我打算将页面分为两块一块显示列表，一块显示详细情况，顺便加上class方便以后加样式，然后这两块地方是想加浮动的，为了防止忘记添加消除浮动，先带上消除浮动的div。</p></blockquote>
+
+<p>  完整代码如下：</p>
+
+<p><figure class='code'><figcaption><span>first.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">&lt;!-- 用来显示商品列表的页面 --&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;div</span>  <span class="na">class=</span><span class="s">&quot;shop-list&quot;</span> <span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">&lt;!-- 用来显示商品详细的页面 --&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;background-color:#FFFF00&quot;</span> <span class="na">class=</span><span class="s">&quot;shop-detal&quot;</span> <span class="na">ng-show=</span><span class="s">&quot;shopDetail&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;clearfix&quot;</span> <span class="na">style=</span><span class="s">&quot;clear: both&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">&lt;!-- 用来显示购物车的页面 --&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;background-color:#FF3300&quot;</span> <span class="na">class=</span><span class="s">&quot;cart&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>商品列表</h2>
+
+<p>  这里是重复生成的页面，我们只需要设计其中一个的div然后让angular自动按照json数据列表生成即可。</p>
+
+<p>  这里使用的是ng-repeat属性语法为</p>
+
+<blockquote><p>ng-repeat=&ldquo;value in array&rdquo;</p>
+
+<p>在被ng-repeat包裹的块级元素将会连同自身及孩子进行复制和重复，在被包裹元素内部可以使用</p>
+
+<blockquote><p>value来操作读取,同步绑定你array内的数据，而可以用来获得此次循环的索引值</p></blockquote>
+
+<p>Tips：值得注意的是，不提倡使用来确定元素，这种方式并不准确，因为$index并不进行双向数据绑定，如果你在后文对该数组进行重排列等操作后，将会使得$index无法取得准确的数值，在这种时候请使用具体的value.id等方式来传递参数。</p></blockquote>
+
+<p><figure class='code'><figcaption><span>first.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">&lt;!-- 用来显示商品列表的页面 --&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;div</span>  <span class="na">class=</span><span class="s">&quot;shop-list&quot;</span> <span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;background-color:#001188&quot;</span> <span class="na">class=</span><span class="s">&quot;list-single&quot;</span> <span class="na">ng-repeat=</span><span class="s">&quot;item in items&quot;</span> <span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>  这里我把商品命名为items，这里先拿记事本记录下来，在controller中将会使用到</p>
+
+<p><figure class='code'><figcaption><span>first.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;title&quot;</span> <span class="na">id=</span><span class="s">&quot;&amp;#123;&amp;#123;item.id&amp;#125;&amp;#125;&quot;</span><span class="nt">&gt;</span> 来自：<span class="ni">&amp;#123;&amp;#123;</span>item.from.name<span class="ni">&amp;#125;&amp;#125;</span><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;shop-list-content&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;table&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;td&gt;</span>商品名称：<span class="nt">&lt;/td&gt;&lt;td&gt;&lt;h3&gt;</span><span class="ni">&amp;#123;&amp;#123;</span>item.name<span class="ni">&amp;#125;&amp;#125;</span><span class="nt">&lt;/h3&gt;&lt;/td&gt;&lt;td&gt;</span>商品价格：<span class="nt">&lt;/td&gt;&lt;td&gt;</span><span class="ni">&amp;#123;&amp;#123;</span>item.price<span class="ni">&amp;#125;&amp;#125;</span><span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;td&gt;</span>商品限时折扣：<span class="nt">&lt;/td&gt;&lt;td&gt;</span><span class="ni">&amp;#123;&amp;#123;</span>item.discount<span class="ni">&amp;#125;&amp;#125;</span>%<span class="nt">&lt;/td&gt;&lt;td&gt;</span>每3件优惠：<span class="nt">&lt;/td&gt;&lt;td&gt;</span><span class="ni">&amp;#123;&amp;#123;</span>item.preferentialPrice<span class="ni">&amp;#125;&amp;#125;</span>元<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/table&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>  然后按照之前设计好的模型填入具体的内容，（即上面list.json）的内容</p>
+
+<p>  随后我们需要一个按钮来响应我们的操作，由于我们需要绑定angular独有的click事件，所以这里引入ng-click，具体语法如下</p>
+
+<blockquote><p>ng-click=&ldquo;dothings()&rdquo;</p></blockquote>
+
+<p>  在click内仍然使用任何双向绑定的数据，这里只是为了演示，并没有加入“现在购买的”ng-click属性。</p>
+
+<p><figure class='code'><figcaption><span>first.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;bty&quot;</span><span class="nt">&gt;&lt;button</span> <span class="na">ng-click=</span><span class="s">&quot;showDetail(item)&quot;</span><span class="nt">&gt;</span>查看详情<span class="nt">&lt;/button&gt;&lt;button&gt;</span>现在购买！<span class="nt">&lt;/button&gt;&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>  完整代码如下：</p>
+
+<p><figure class='code'><figcaption><span>first.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">&lt;!-- 用来显示商品列表的页面 --&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;div</span>  <span class="na">class=</span><span class="s">&quot;shop-list&quot;</span> <span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;background-color:#001188&quot;</span> <span class="na">class=</span><span class="s">&quot;list-single&quot;</span> <span class="na">ng-repeat=</span><span class="s">&quot;item in items&quot;</span> <span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;title&quot;</span> <span class="na">id=</span><span class="s">&quot;&amp;#123;&amp;#123;item.id&amp;#125;&amp;#125;&quot;</span><span class="nt">&gt;</span> 来自：<span class="ni">&amp;#123;&amp;#123;</span>item.from.name<span class="ni">&amp;#125;&amp;#125;</span><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;shop-list-content&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;table&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>                    <span class="nt">&lt;td&gt;</span>商品名称：<span class="nt">&lt;/td&gt;&lt;td&gt;&lt;h3&gt;</span><span class="ni">&amp;#123;&amp;#123;</span>item.name<span class="ni">&amp;#125;&amp;#125;</span><span class="nt">&lt;/h3&gt;&lt;/td&gt;&lt;td&gt;</span>商品价格：<span class="nt">&lt;/td&gt;&lt;td&gt;</span><span class="ni">&amp;#123;&amp;#123;</span>item.price<span class="ni">&amp;#125;&amp;#125;</span><span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>                    <span class="nt">&lt;td&gt;</span>商品限时折扣：<span class="nt">&lt;/td&gt;&lt;td&gt;</span><span class="ni">&amp;#123;&amp;#123;</span>item.discount<span class="ni">&amp;#125;&amp;#125;</span>%<span class="nt">&lt;/td&gt;&lt;td&gt;</span>每3件优惠：<span class="nt">&lt;/td&gt;&lt;td&gt;</span><span class="ni">&amp;#123;&amp;#123;</span>item.preferentialPrice<span class="ni">&amp;#125;&amp;#125;</span>元<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/table&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;bty&quot;</span><span class="nt">&gt;&lt;button</span>  <span class="na">ng-click=</span><span class="s">&quot;showDetail(item)&quot;</span><span class="nt">&gt;</span>查看详情<span class="nt">&lt;/button&gt;&lt;button&gt;</span>现在购买！<span class="nt">&lt;/button&gt;&lt;/div&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>商品详细</h2>
+
+<p>  在这个页面我不希望一开始就是被显示的，所以在这里我加入了一个ng-show，这是angular独有的用来显示或隐藏dom元素的函数
+  语法如下：</p>
+
+<blockquote><p>ng-show=&ldquo;boolean&rdquo;
+ng-hide=&ldquo;boolean&rdquo;</p></blockquote>
+
+<p>  在属性内部可以使用任何返回值为boolean的函数表达式，或者双向绑定的变量</p>
+
+<p>  其他的并没有什么新的内容直接可以照着填写就好，例如商品的别的属性也不想从服务器获取，直接从list中获取就好了，这里的ng-show使用了shopDetail这个变量来判断</p>
+
+<p>  完整代码如下：</p>
+
+<p><figure class='code'><figcaption><span>first.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">&lt;!-- 用来显示商品详细的页面 --&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;background-color:#FFFF00&quot;</span> <span class="na">class=</span><span class="s">&quot;shop-detal&quot;</span> <span class="na">ng-show=</span><span class="s">&quot;shopDetail&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;detail-content&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;h2&gt;</span><span class="ni">&amp;#123;&amp;#123;</span>detail.name<span class="ni">&amp;#125;&amp;#125;</span><span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;img</span> <span class="na">alt=</span><span class="s">&quot;这个是商品的图片balabala&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;p&gt;</span>原价为：<span class="ni">&amp;#123;&amp;#123;</span>detail.price<span class="ni">&amp;#125;&amp;#125;</span><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;h1&gt;</span>现价为：￥<span class="ni">&amp;#123;&amp;#123;</span>detail.price*detail.discount/100<span class="ni">&amp;#125;&amp;#125;</span><span class="nt">&lt;/h1&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;h2&gt;</span>现满3件立减<span class="ni">&amp;#123;&amp;#123;</span>detail.preferentialPrice<span class="ni">&amp;#125;&amp;#125;</span>元<span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;p&gt;</span>你需要订购的数量为：<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;number&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;mount&quot;</span> <span class="nt">/&gt;&lt;/p&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;button</span> <span class="na">ng-click=</span><span class="s">&quot;addItemIntoCart()&quot;</span><span class="nt">&gt;&lt;h1&gt;</span>加入购物车<span class="nt">&lt;/h1&gt;&lt;/button&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>购物车边栏</h2>
+
+<p>  在购物车中我将会用来显示到底购买了那些功能，纯css是比较难调整div的大小的，这里就引入一个ng-style的属性来控制style，同样的还有ng-class
+  语法如下：</p>
+
+<blockquote><p>ng-style=&ldquo;json{attribute1:value,……}&rdquo;
+ng-class=&ldquo;json{class1:true,……}&rdquo;</p></blockquote>
+
+<p>  你需要返回为上述格式的json来供angular识别，这里我需要识别一下整个cart-detail浮出栏的大小，使用了bt()方法来返回值，这里需要记录一下以便之后使用。</p>
+
+<p><figure class='code'><figcaption><span>first.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">&lt;!-- 用来显示购物车的页面 --&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;background-color:#FF3300&quot;</span> <span class="na">class=</span><span class="s">&quot;cart&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;cart-detail&quot;</span> <span class="na">ng-style=</span><span class="s">&quot;bt()&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;background-color:#001188&quot;</span> <span class="na">class=</span><span class="s">&quot;cart-single&quot;</span>  <span class="na">ng-repeat=</span><span class="s">&quot;item in cart.items&quot;</span> <span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;h2&gt;</span><span class="ni">&amp;#123;&amp;#123;</span>item.name<span class="ni">&amp;#125;&amp;#125;</span><span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;h3&gt;</span>单价：<span class="ni">&amp;#123;&amp;#123;</span>item.price<span class="ni">&amp;#125;&amp;#125;</span>,数量<span class="ni">&amp;#123;&amp;#123;</span>item.mount<span class="ni">&amp;#125;&amp;#125;</span><span class="nt">&lt;/h3&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;h1&gt;</span>你的购物车<span class="nt">&lt;/h1&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>css</h2>
+
+<p>  之前就说过css不是重点，大家看着就好，丑陋是不能避免的~</p>
+
+<p><figure class='code'><figcaption><span>public.css </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nt">html</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span><span class="m">62.5%</span><span class="p">;</span> <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="m">10</span><span class="err">÷</span><span class="m">16</span><span class="o">=</span><span class="m">62.5%</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nt">body</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span><span class="m">12px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span><span class="m">1</span><span class="o">.</span><span class="m">2</span><span class="n">rem</span> <span class="p">;</span> <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="m">12</span><span class="err">÷</span><span class="m">10</span><span class="o">=</span><span class="m">1</span><span class="o">.</span><span class="m">2</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nt">p</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span><span class="m">14px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span><span class="m">1</span><span class="o">.</span><span class="m">4</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nt">div</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">position</span><span class="o">:</span><span class="k">relative</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span><span class="m">100%</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">height</span><span class="o">:</span><span class="m">100%</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nt">button</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">color</span><span class="o">:</span> <span class="m">#003399</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border</span><span class="o">:</span> <span class="m">1px</span> <span class="m">#000000</span> <span class="k">solid</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">color</span><span class="o">:</span> <span class="m">#006699</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border-bottom</span><span class="o">:</span> <span class="m">#93bee2</span> <span class="m">1px</span> <span class="k">solid</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border-left</span><span class="o">:</span> <span class="m">#93bee2</span> <span class="m">1px</span> <span class="k">solid</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border-right</span><span class="o">:</span> <span class="m">#93bee2</span> <span class="m">1px</span> <span class="k">solid</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border-top</span><span class="o">:</span> <span class="m">#93bee2</span> <span class="m">1px</span> <span class="k">solid</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">background-color</span><span class="o">:</span> <span class="m">#FFFFFF</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">cursor</span><span class="o">:</span> <span class="n">hand</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">font-style</span><span class="o">:</span> <span class="k">normal</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nt">table</span><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span><span class='line'><span class="nt">img</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">border</span><span class="o">:</span><span class="m">1px</span> <span class="m">#000000</span> <span class="k">solid</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span><span class="m">20</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span><span class="m">20</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.body</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span><span class="m">95%</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">margin-left</span><span class="o">:</span> <span class="k">auto</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">margin-right</span><span class="o">:</span> <span class="k">auto</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.title</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">text-align</span><span class="o">:</span><span class="k">right</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">height</span><span class="o">:</span><span class="m">1</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span><span class="m">100%</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">padding-right</span><span class="o">:</span><span class="m">1</span><span class="o">.</span><span class="m">25</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.shop-detal</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">float</span><span class="o">:</span><span class="k">left</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span><span class="m">55%</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span><span class='line'><span class="nc">.detail-content</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">padding</span><span class="o">:</span><span class="m">1</span><span class="o">.</span><span class="m">25</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.shop-list</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">float</span><span class="o">:</span><span class="k">left</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span><span class="m">45%</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.bty</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">text-align</span><span class="o">:</span><span class="k">right</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.list-single</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">color</span><span class="o">:</span><span class="m">#FFFFFF</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">padding</span><span class="o">:</span><span class="m">1</span><span class="o">.</span><span class="m">25</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">margin-left</span><span class="o">:</span> <span class="k">auto</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">margin-right</span><span class="o">:</span> <span class="k">auto</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">margin-bottom</span><span class="o">:</span><span class="m">0</span><span class="o">.</span><span class="m">75</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span><span class="m">75%</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.clearfix</span><span class="nd">:after</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">visibility</span><span class="o">:</span> <span class="k">hidden</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">display</span><span class="o">:</span> <span class="k">block</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span><span class="m">12px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span><span class="m">1</span><span class="o">.</span><span class="m">2</span><span class="n">rem</span> <span class="p">;</span> <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="m">12</span><span class="err">÷</span><span class="m">10</span><span class="o">=</span><span class="m">1</span><span class="o">.</span><span class="m">2</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'>    <span class="k">content</span><span class="o">:</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="o">.&amp;</span><span class="n">rdquo</span><span class="p">;;</span>
+</span><span class='line'>    <span class="k">clear</span><span class="o">:</span> <span class="k">both</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">height</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.clearfix</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">z-index</span><span class="o">:-</span><span class="m">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span><span class="m">0px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">height</span><span class="o">:</span><span class="m">0px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">clear</span><span class="o">:</span> <span class="k">both</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.cart</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">right</span><span class="o">:</span><span class="m">0px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">height</span><span class="o">:</span><span class="m">7</span><span class="o">.</span><span class="m">375</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span><span class="m">45</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">bottom</span><span class="o">:</span><span class="m">0px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">position</span><span class="o">:</span><span class="k">fixed</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.cart</span><span class="nd">:hover</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">right</span><span class="o">:</span><span class="m">0px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">height</span><span class="o">:</span><span class="m">7</span><span class="o">.</span><span class="m">375</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">position</span><span class="o">:</span><span class="k">fixed</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span><span class="m">45</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">bottom</span><span class="o">:</span><span class="m">0px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nt">p</span><span class="o">&gt;</span><span class="nc">.cart-single</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">float</span><span class="o">:</span><span class="k">left</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">color</span><span class="o">:</span><span class="m">#FFFFFF</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">padding</span><span class="o">:</span><span class="m">1</span><span class="o">.</span><span class="m">25</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">margin-bottom</span><span class="o">:</span><span class="m">1</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span><span class="m">100%</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">height</span><span class="o">:</span><span class="m">7</span><span class="o">.</span><span class="m">375</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border</span><span class="o">:</span><span class="m">#FFFFFF</span> <span class="k">solid</span> <span class="m">1px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.cart</span><span class="nd">:hover</span> <span class="nc">.cart-detail</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">position</span><span class="o">:</span><span class="k">fixed</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">display</span><span class="o">:</span><span class="k">block</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border</span><span class="o">:</span><span class="m">#FF3300</span> <span class="k">solid</span> <span class="m">1px</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">height</span><span class="o">:</span><span class="m">100%</span><span class="p">;</span>
+</span><span class='line'><span class="k">bottom</span><span class="o">:</span> <span class="m">7</span><span class="o">.</span><span class="m">375</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span><span class='line'><span class="nc">.cart</span> <span class="nc">.cart-detail</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">position</span><span class="o">:</span><span class="k">fixed</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">display</span><span class="o">:</span><span class="k">none</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>写在最后</h2>
+
+<p>下一篇 我将会继续后面angular部分的代码，视图的设计已经结束了，当然这部分内容是不足以运行的，需要下一篇[angular.js]第三章 一个简单的购物车范例(2)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[angular.js]第一章 基础知识篇]]></title>
+    <link href="http://iceprosurface.com/blog/2016/02/26/angular-1st/"/>
+    <updated>2016-02-26T19:56:38+08:00</updated>
+    <id>http://iceprosurface.com/blog/2016/02/26/angular-1st</id>
+    <content type="html"><![CDATA[<blockquote><p>重要信息：在阅读该博文前请确保有以下前置知识：1) htm  2) javascript   3) css</p></blockquote>
+
+<h2>一.介绍</h2>
+
+<hr />
+
+<p>为什么我开始学习使用angular.js？这得从知乎大佬的一片文章说起，时间有点久远了，链接是给不出了。这里大致说一下，大意就是，要往深处学习，沿着陡峭的web前端知识向上攀爬，最先走过的是原生javascript->随后就是最好的用jquery->下一步便是angular.js顺便还提及了ext.js。
+对于前两个我有着大量的使用经验，从最开始简单的js写了大量的代码完成一个精美漂亮的照片墙（高仿版），到jquery数行代码结合插件快速完成开发，这些过程有着大量的成就感，但是随着越来越多的应用开发使用（其实只是自己做着玩的东西），发现随着应用逻辑的快速增长，代码越来越长直到最后难以维护，大量重复冗余的代码堆积，然后就学习了原型方法，使用各种模型方法来简化代码，增加复用，现在，有一个大佬告诉了我一个新的解决方案&ndash;angular.js
+记得学java的时候有一个很不错的特性&ndash;依赖注入（ioc），没记错的话这是一种被称为AOP面切面的编程思想，具体怎么样早就忘记了，据说angular.js就可以做到这种操作具体的将就是
+<code>反正我不用考虑程序是怎么完成操作的，我只需要完成程序预定的接口就可以完成具体的操作。</code></p>
+
+<!--more-->
+
+
+<h2>二.配置angular.js环境</h2>
+
+<hr />
+
+<p>讲道理其实并不需要什么配置，我们需要做的是跑到github上下载就好，也可以直接从google上下载，百度上下载都可以,也可以下载本站的内容
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./angular.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>三.第一个helloworld程序</h2>
+
+<hr />
+
+<p>不论任何语言，第一条永远都是创建一个helloworld程序</p>
+
+<p>首先，我们需要准备以下几个文件：</p>
+
+<ul>
+<li>hello.html</li>
+<li>controllers.js</li>
+<li>angular.min.js</li>
+</ul>
+
+
+<p>随后我们需要编辑上述的第一个和第二个文件</p>
+
+<p><figure class='code'><figcaption><span>hello.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="ni">&amp;lt;</span>!doctype html&gt;
+</span><span class='line'><span class="nt">&lt;html</span> <span class="na">ng-app=</span><span class="s">&quot;HelloApp&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;head&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./angular.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./controllers.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/head&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">ng-controller=</span><span class="s">&quot;HelloController&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;label&gt;</span>Name:<span class="nt">&lt;/label&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;meeting.text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Enter a name here&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;hr&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;h1&gt;</span>Hello !<span class="nt">&lt;/h1&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><figure class='code'><figcaption><span>controllers.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">HelloModule</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">HelloApp</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;,</span> <span class="p">[]);</span>
+</span><span class='line'><span class="nx">HelloModule</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">HelloController</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'><span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">){</span>
+</span><span class='line'><span class="nx">$scope</span><span class="p">.</span><span class="nx">meeting</span><span class="o">=</span><span class="p">{</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">text</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;</span><span class="o">:&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">icepro</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;};</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>当然我不是很懂这些代码中间是怎么操作的不过我只要知道他能完成什么就行了</p>
+
+<p><img src="/images/effect.png" alt="效果图" /></p>
+
+<p>看这个就是最后的效果，你可以随意更改内容，他会简单的将input同步到到那个被标记的变量的地方。</p>
+
+<p>是不是发现什么诀窍了？对！使用这个我们不需要再去考虑繁琐的dom元素操作了，在这之前，我们可能需要在div上设置一系列的id，用jquery+原生js取子元素，获取<P>的html属性然后修改。而现在不需要了！</p>
+
+<h2>四.例子详解</h2>
+
+<hr />
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;html</span> <span class="na">ng-app=</span><span class="s">&quot;HelloApp&quot;</span><span class="nt">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+首先我们将ng-app绑定到了html元素上,这个属性是用来声明angular程序的边界的，这里的边界就是整个html标签，当然了你也可以这么设置：
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>……
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">ng-app=</span><span class="s">&quot;HelloApp&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  ……
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>……
+</span></code></pre></td></tr></table></div></figure>
+这样就把程序设定为该个div以内，保证不影响其他的dom元素。
+然后就是controller元件，angular.js同许多后台框架一样，拥有层次较为清晰的mvc架构。
+所以有一个controller也是理所应当的。
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'> <span class="kd">var</span> <span class="nx">HelloModule</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">HelloApp</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;,</span> <span class="p">[]);</span>
+</span></code></pre></td></tr></table></div></figure>
+这里我比较倾向于称为实例化一个helloapp模块，简单的将就是调用angular生成了一个helloapp模块，这里的我没有看过源码比较大的可能就是直接把一个原始模块的prototype方法直接赋予了这个controller，这样就在全局作用中注册了这模块。
+随后我们在这个模块中注册了名为hellocontroller的控制器。
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">HelloModule</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">HelloController</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">){</span>
+</span><span class='line'>        <span class="nx">$scope</span><span class="p">.</span><span class="nx">meeting</span><span class="o">=</span><span class="p">{</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">text</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;</span><span class="o">:&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">hi</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;};</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+在注册完所有的控制器模块后。相应的，我们可以简单的在这个控制器的作用范围中使用(标记为ng-controller=&ldquo;HelloController&rdquo;)调用任何在这个控制器中声明的方法和变量。</p>
+]]></content>
+  </entry>
+  
+</feed>
