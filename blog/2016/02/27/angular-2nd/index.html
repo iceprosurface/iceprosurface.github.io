@@ -478,9 +478,9 @@
 
 <p>在被ng-repeat包裹的块级元素将会连同自身及孩子进行复制和重复，在被包裹元素内部可以使用</p>
 
-<blockquote><p>value来操作读取,同步绑定你array内的数据，而可以用来获得此次循环的索引值</p></blockquote>
+<blockquote><p>value来操作读取,同步绑定你array内的数据，而{{$index}}可以用来获得此次循环的索引值</p></blockquote>
 
-<p>Tips：值得注意的是，不提倡使用来确定元素，这种方式并不准确，因为$index并不进行双向数据绑定，如果你在后文对该数组进行重排列等操作后，将会使得$index无法取得准确的数值，在这种时候请使用具体的value.id等方式来传递参数。</p></blockquote>
+<p>Tips：值得注意的是，不提倡使用{{$index}}来确定元素，这种方式并不准确，因为$index并不进行双向数据绑定，如果你在后文对该数组进行重排列等操作后，将会使得$index无法取得准确的数值，在这种时候请使用具体的value.id等方式来传递参数。</p></blockquote>
 
 <figure class='code'><figcaption><span>first.html </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -511,14 +511,14 @@
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;title&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 来自：<span class="nt">&lt;/div&gt;</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;title&quot;</span> <span class="na">id=</span><span class="s">&quot;\{\{item.id\}\}&quot;</span><span class="nt">&gt;</span> 来自：\{\{item.from.name\}\}<span class="nt">&lt;/div&gt;</span>
 </span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;shop-list-content&quot;</span><span class="nt">&gt;</span>
 </span><span class='line'>  <span class="nt">&lt;table&gt;</span>
 </span><span class='line'>      <span class="nt">&lt;tr&gt;</span>
-</span><span class='line'>          <span class="nt">&lt;td&gt;</span>商品名称：<span class="nt">&lt;/td&gt;&lt;td&gt;&lt;h3&gt;&lt;/h3&gt;&lt;/td&gt;&lt;td&gt;</span>商品价格：<span class="nt">&lt;/td&gt;&lt;td&gt;&lt;/td&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;td&gt;</span>商品名称：<span class="nt">&lt;/td&gt;&lt;td&gt;&lt;h3&gt;</span>\{\{item.name\}\}<span class="nt">&lt;/h3&gt;&lt;/td&gt;&lt;td&gt;</span>商品价格：<span class="nt">&lt;/td&gt;&lt;td&gt;</span>\{\{item.price\}\}<span class="nt">&lt;/td&gt;</span>
 </span><span class='line'>      <span class="nt">&lt;/tr&gt;</span>
 </span><span class='line'>      <span class="nt">&lt;tr&gt;</span>
-</span><span class='line'>          <span class="nt">&lt;td&gt;</span>商品限时折扣：<span class="nt">&lt;/td&gt;&lt;td&gt;</span>%<span class="nt">&lt;/td&gt;&lt;td&gt;</span>每3件优惠：<span class="nt">&lt;/td&gt;&lt;td&gt;</span>元<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;td&gt;</span>商品限时折扣：<span class="nt">&lt;/td&gt;&lt;td&gt;</span>\{\{item.discount\}\}%<span class="nt">&lt;/td&gt;&lt;td&gt;</span>每3件优惠：<span class="nt">&lt;/td&gt;&lt;td&gt;</span>\{\{item.preferentialPrice\}\}元<span class="nt">&lt;/td&gt;</span>
 </span><span class='line'>      <span class="nt">&lt;/tr&gt;</span>
 </span><span class='line'>  <span class="nt">&lt;/table&gt;</span>
 </span><span class='line'>  <span class="nt">&lt;br/&gt;</span>
@@ -564,14 +564,14 @@
 </pre></td><td class='code'><pre><code class='html'><span class='line'><span class="c">&lt;!-- 用来显示商品列表的页面 --&gt;</span>
 </span><span class='line'><span class="nt">&lt;div</span>  <span class="na">class=</span><span class="s">&quot;shop-list&quot;</span> <span class="nt">&gt;</span>
 </span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;background-color:#001188&quot;</span> <span class="na">class=</span><span class="s">&quot;list-single&quot;</span> <span class="na">ng-repeat=</span><span class="s">&quot;item in items&quot;</span> <span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;title&quot;</span> <span class="na">id=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;</span> 来自：<span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;title&quot;</span> <span class="na">id=</span><span class="s">&quot;\{\{item.id\}\}&quot;</span><span class="nt">&gt;</span> 来自：\{\{item.from.name\}\}<span class="nt">&lt;/div&gt;</span>
 </span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;shop-list-content&quot;</span><span class="nt">&gt;</span>
 </span><span class='line'>          <span class="nt">&lt;table&gt;</span>
 </span><span class='line'>              <span class="nt">&lt;tr&gt;</span>
-</span><span class='line'>                  <span class="nt">&lt;td&gt;</span>商品名称：<span class="nt">&lt;/td&gt;&lt;td&gt;&lt;h3&gt;&lt;/h3&gt;&lt;/td&gt;&lt;td&gt;</span>商品价格：<span class="nt">&lt;/td&gt;&lt;td&gt;&lt;/td&gt;</span>
+</span><span class='line'>                  <span class="nt">&lt;td&gt;</span>商品名称：<span class="nt">&lt;/td&gt;&lt;td&gt;&lt;h3&gt;</span>\{\{item.name\}\}<span class="nt">&lt;/h3&gt;&lt;/td&gt;&lt;td&gt;</span>商品价格：<span class="nt">&lt;/td&gt;&lt;td&gt;</span>\{\{item.price\}\}<span class="nt">&lt;/td&gt;</span>
 </span><span class='line'>              <span class="nt">&lt;/tr&gt;</span>
 </span><span class='line'>              <span class="nt">&lt;tr&gt;</span>
-</span><span class='line'>                  <span class="nt">&lt;td&gt;</span>商品限时折扣：<span class="nt">&lt;/td&gt;&lt;td&gt;</span>%<span class="nt">&lt;/td&gt;&lt;td&gt;</span>每3件优惠：<span class="nt">&lt;/td&gt;&lt;td&gt;</span>元<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>                  <span class="nt">&lt;td&gt;</span>商品限时折扣：<span class="nt">&lt;/td&gt;&lt;td&gt;</span>\{\{item.discount\}\}%<span class="nt">&lt;/td&gt;&lt;td&gt;</span>每3件优惠：<span class="nt">&lt;/td&gt;&lt;td&gt;</span>\{\{item.preferentialPrice\}\}元<span class="nt">&lt;/td&gt;</span>
 </span><span class='line'>              <span class="nt">&lt;/tr&gt;</span>
 </span><span class='line'>          <span class="nt">&lt;/table&gt;</span>
 </span><span class='line'>          <span class="nt">&lt;br/&gt;</span>
@@ -614,12 +614,12 @@ ng-hide=&ldquo;boolean&rdquo;</p></blockquote>
 </pre></td><td class='code'><pre><code class='html'><span class='line'><span class="c">&lt;!-- 用来显示商品详细的页面 --&gt;</span>
 </span><span class='line'><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;background-color:#FFFF00&quot;</span> <span class="na">class=</span><span class="s">&quot;shop-detal&quot;</span> <span class="na">ng-show=</span><span class="s">&quot;shopDetail&quot;</span><span class="nt">&gt;</span>
 </span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;detail-content&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;h2&gt;&lt;/h2&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;h2&gt;</span>\{\{detail.name\}\}<span class="nt">&lt;/h2&gt;</span>
 </span><span class='line'>      <span class="nt">&lt;img</span> <span class="na">alt=</span><span class="s">&quot;这个是商品的图片balabala&quot;</span><span class="nt">/&gt;</span>
 </span><span class='line'>      <span class="nt">&lt;br/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;p&gt;</span>原价为：<span class="nt">&lt;/p&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;h1&gt;</span>现价为：￥<span class="nt">&lt;/h1&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;h2&gt;</span>现满3件立减元<span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;p&gt;</span>原价为：\{\{detail.price\}\}<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;h1&gt;</span>现价为：￥\{\{detail.price*detail.discount/100\}\}<span class="nt">&lt;/h1&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;h2&gt;</span>现满3件立减\{\{detail.preferentialPrice\}\}元<span class="nt">&lt;/h2&gt;</span>
 </span><span class='line'>      <span class="nt">&lt;p&gt;</span>你需要订购的数量为：<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;number&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;mount&quot;</span> <span class="nt">/&gt;&lt;/p&gt;</span>
 </span><span class='line'>      <span class="nt">&lt;button</span> <span class="na">ng-click=</span><span class="s">&quot;addItemIntoCart()&quot;</span><span class="nt">&gt;&lt;h1&gt;</span>加入购物车<span class="nt">&lt;/h1&gt;&lt;/button&gt;</span>
 </span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
@@ -653,8 +653,8 @@ ng-class=&ldquo;json{class1:true,……}&rdquo;</p></blockquote>
 </span><span class='line'><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;background-color:#FF3300&quot;</span> <span class="na">class=</span><span class="s">&quot;cart&quot;</span><span class="nt">&gt;</span>
 </span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;cart-detail&quot;</span> <span class="na">ng-style=</span><span class="s">&quot;bt()&quot;</span><span class="nt">&gt;</span>
 </span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;background-color:#001188&quot;</span> <span class="na">class=</span><span class="s">&quot;cart-single&quot;</span>  <span class="na">ng-repeat=</span><span class="s">&quot;item in cart.items&quot;</span> <span class="nt">&gt;</span>
-</span><span class='line'>          <span class="nt">&lt;h2&gt;&lt;/h2&gt;</span>
-</span><span class='line'>          <span class="nt">&lt;h3&gt;</span>单价：,数量<span class="nt">&lt;/h3&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;h2&gt;</span>\{\{item.name\}\}<span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;h3&gt;</span>单价：\{\{item.price\}\},数量\{\{item.mount\}\}<span class="nt">&lt;/h3&gt;</span>
 </span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
 </span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
 </span><span class='line'>  <span class="nt">&lt;h1&gt;</span>你的购物车<span class="nt">&lt;/h1&gt;</span>
