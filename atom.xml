@@ -4,7 +4,7 @@
   <title><![CDATA[icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-02-29T11:35:22+08:00</updated>
+  <updated>2016-02-29T11:37:50+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -358,15 +358,12 @@
 <h2>视图代码编写</h2>
 
 <pre><code>现在第一点我们需要先创建两个页面：
+
+- first.page(-不应该是index！-不不不个人爱好)
+- closingCost
+
+讲道理自己设计css可不是我擅长的事情，css方面嘛，大可忽略，直接上bootstrap就好，我这里就只是练习一下，写的难看一点别介意。
 </code></pre>
-
-<ul>
-<li>first.page(-不应该是index！-不不不个人爱好)</li>
-<li><p>closingCost</p>
-
-<p>  讲道理自己设计css可不是我擅长的事情，css方面嘛，大可忽略，直接上bootstrap就好，我这里就只是练习一下，写的难看一点别介意。</p></li>
-</ul>
-
 
 <h2>外层div和基本框架</h2>
 
