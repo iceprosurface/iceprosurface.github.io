@@ -256,7 +256,7 @@
 <p>在注册完所有的控制器模块后。相应的，我们可以简单的在这个控制器的作用范围中使用(标记为ng-controller=&ldquo;HelloController&rdquo;)调用任何在这个控制器中声明的方法和变量。</p>
 </div>
 	<script>
-		$(function(){
+		$(document).ready(function(){ 
 			$(".ni").each(function(){
 			  $(this).html($(this).html().replace(/&amp;#125;/g,'}'));
 			  $(this).html($(this).html().replace(/&amp;#123;/g,'{'));
