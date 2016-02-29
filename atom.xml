@@ -4,7 +4,7 @@
   <title><![CDATA[icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-02-29T11:40:58+08:00</updated>
+  <updated>2016-02-29T11:44:44+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -313,14 +313,14 @@
 
 <ol>
 <li>打开网站</li>
-<li>选择商品
-2.1 点击商品
-2.2 选择数量（或者不选择）
-2.3 加入购物车</li>
-<li>结算
-3.1 补加商品数量（可选）
-3.2 自动补全总价
-3.3 结算</li>
+<li>选择商品</li>
+<li>点击商品</li>
+<li>选择数量（或者不选择）</li>
+<li>加入购物车</li>
+<li>结算</li>
+<li>补加商品数量（可选）</li>
+<li>自动补全总价</li>
+<li>结算</li>
 </ol>
 
 
@@ -456,7 +456,7 @@
 
 <p>在被ng-repeat包裹的块级元素将会连同自身及孩子进行复制和重复，在被包裹元素内部可以使用</p>
 
-<blockquote><p>来操作读取,同步绑定你array内的数据，而可以用来获得此次循环的索引值</p></blockquote>
+<blockquote><p>value来操作读取,同步绑定你array内的数据，而可以用来获得此次循环的索引值</p></blockquote>
 
 <p>Tips：值得注意的是，不提倡使用来确定元素，这种方式并不准确，因为$index并不进行双向数据绑定，如果你在后文对该数组进行重排列等操作后，将会使得$index无法取得准确的数值，在这种时候请使用具体的value.id等方式来传递参数。</p></blockquote>
 
