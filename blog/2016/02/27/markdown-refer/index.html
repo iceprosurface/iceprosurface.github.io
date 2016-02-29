@@ -168,6 +168,14 @@
 
 <p><a href="http://www.markdown.cn/" title="markdown中文网">markdown中文网</a></p>
 </div>
+	<script>
+		$(function(){
+			$(".ni").each(function(){
+			  $(this).html($(this).html().replace(/&amp;#125;/g,'}'));
+			  $(this).html($(this).html().replace(/&amp;#123;/g,'{'));
+			});
+		});
+	</script>
 
 </article>
 

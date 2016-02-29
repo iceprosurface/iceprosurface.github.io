@@ -916,6 +916,14 @@ ng-class=&ldquo;json{class1:true,……}&rdquo;</p></blockquote>
 
 <p>下一篇 我将会继续后面angular部分的代码，视图的设计已经结束了，当然这部分内容是不足以运行的，需要下一篇[angular.js]第三章 一个简单的购物车范例(2)</p>
 </div>
+	<script>
+		$(function(){
+			$(".ni").each(function(){
+			  $(this).html($(this).html().replace(/&amp;#125;/g,'}'));
+			  $(this).html($(this).html().replace(/&amp;#123;/g,'{'));
+			});
+		});
+	</script>
 
 </article>
 
