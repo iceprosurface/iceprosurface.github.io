@@ -477,9 +477,11 @@
 
 <blockquote><p>ng-repeat=&ldquo;value in array&rdquo;</p>
 
-<p>在被ng-repeat包裹的块级元素将会连同自身及孩子进行复制和重复，在被包裹元素内部可以使用
-    > 来操作读取,同步绑定你array内的数据，而可以用来获得此次循环的索引值
-Tips：值得注意的是，不提倡使用来确定元素，这种方式并不准确，因为$index并不进行双向数据绑定，如果你在后文对该数组进行重排列等操作后，将会使得$index无法取得准确的数值，在这种时候请使用具体的value.id等方式来传递参数。</p></blockquote>
+<p>在被ng-repeat包裹的块级元素将会连同自身及孩子进行复制和重复，在被包裹元素内部可以使用</p>
+
+<blockquote><p>来操作读取,同步绑定你array内的数据，而可以用来获得此次循环的索引值</p></blockquote>
+
+<p>Tips：值得注意的是，不提倡使用来确定元素，这种方式并不准确，因为$index并不进行双向数据绑定，如果你在后文对该数组进行重排列等操作后，将会使得$index无法取得准确的数值，在这种时候请使用具体的value.id等方式来传递参数。</p></blockquote>
 
 <figure class='code'><figcaption><span>first.html </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
