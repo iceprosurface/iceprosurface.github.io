@@ -10,7 +10,7 @@
 	<meta name="description" content="发布于：2016-02-27 [Markdown] 为什么我要推荐使用markdown而不是富文本 曾经我也是富文本的拥护者而现在我却不喜欢了 为什么说富文本不好 很多人都用过富文本，比如各大sns网站的博客系统，这些系统统一使用了富文本，甚至可以上传doc自动读取。
 对于程序员来说， &hellip;">
 	
-
+	<meta name="baidu-site-verification" content="pBXjf7BJLg" />
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
@@ -147,17 +147,68 @@
 	
 
 	
+	  
+	
 
 
-发布于：<time datetime="2016-02-27T14:39:34+08:00" data-updated="true" itemprop="datePublished">2016-02-27</time></div>
+修改于：<time datetime="2016-02-28T16:18:34+08:00" class="updated" itemprop="dateModified">2016-02-28</time></div>
 		<div class="tags">
 
 </div>
 		
 	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2016/02/27/angular-2nd/" itemprop="url">[angular.js]第二章 一个简单的购物车范例</a></h1>
+	<h1 class="title" itemprop="name"><a href="/blog/2016/02/27/angular-2nd/" itemprop="url">[angular.js]第二章 一个简单的购物车范例(1)</a></h1>
 	<div class="entry-content" itemprop="articleBody">
-		<blockquote><p>博主还没开始码字，学了好几天得休息休息就酱~</p></blockquote>
+		<blockquote><p>千里之行，始于足下</p></blockquote>
+
+<h1>angular.js 基础范例简单购物车</h1>
+
+<h2>设计思路</h2>
+
+<p>首先我们需要从mvc上对本次购物车实例进行分析</p>
+
+<ul>
+<li>模型</li>
+<li>视图（也可以叫模板）</li>
+<li>控制器</li>
+</ul>
+
+
+<h2>模型</h2>
+
+<p>首先值得分析的是模型：</p>
+
+<p>每一个购物车都需要以下属性</p>
+
+<ul>
+<li>id（这个唯一的属性将会被持久化到服务器，并作为购物的唯一标识）</li>
+<li>物品
+
+<ul>
+<li>物品ID （这个唯一的属性将会被用来标示物品）</li>
+<li>物品名称</li>
+<li>物品数量</li>
+<li>物品价格</li>
+<li>物品的优惠和折扣
+
+<ul>
+<li>优惠</li>
+<li>折扣</li>
+</ul>
+</li>
+<li>物品的来源(记录来源的ID)</li>
+</ul>
+</li>
+<li>提交日期</li>
+<li>总价格
+
+<ul>
+<li>物品原价</li>
+<li>折扣后价格</li>
+</ul>
+</li>
+</ul>
+
 
 
 		
