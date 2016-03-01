@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Angular | icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/blog/categories/angular/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-03-01T21:35:31+08:00</updated>
+  <updated>2016-03-01T21:36:31+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -1129,7 +1129,7 @@ ng-class=&ldquo;json{class1:true,……}&rdquo;</p></blockquote>
 <h2>写在最后</h2>
 
 <p>下一篇 我将会继续后面angular部分的代码，第一个页面的视图的设计已经结束了，当然这部分内容是不足以运行的，需要下一篇
-<a href="" title="/blog/2016/03/01/angular-2st/">[angular.js]第三章 一个简单的购物车范例(2)</a></p>
+<a href="" title="/blog/2016/03/01/angular-3rd/">[angular.js]第三章 一个简单的购物车范例(2)</a></p>
 ]]></content>
   </entry>
   
