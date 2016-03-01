@@ -4,7 +4,7 @@
   <title><![CDATA[icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-02-29T22:47:15+08:00</updated>
+  <updated>2016-03-01T21:25:51+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -12,6 +12,214 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[[angular.js]第三章 一个简单的购物车范例(2)]]></title>
+    <link href="http://iceprosurface.com/blog/2016/03/01/angular-3rd/"/>
+    <updated>2016-03-01T20:33:53+08:00</updated>
+    <id>http://iceprosurface.com/blog/2016/03/01/angular-3rd</id>
+    <content type="html"><![CDATA[<blockquote><p>千里之行，始于足下</p></blockquote>
+
+<h1>angular.js 基础范例简单购物车</h1>
+
+<h2>前情提要</h2>
+
+<p>  上一章，我们做到了基础的界面设计，在本章中，我们将会完成上一章所需的控制器方面的代码。</p>
+
+<h2>控制器代码</h2>
+
+<h2>从服务器获取数据</h2>
+
+<p>  这里的内容只是讲述基础的前端知识，所以本次介绍将暂时不需要对服务器进行任何操作。</p>
+
+<p>  这里我们使用简单的赋值操作即可完成获取数据的操作，这两项变量分别命名为：</p>
+
+<ul>
+<li>cart</li>
+<li> json</li>
+<li> 原始购物车内容，可以使用cookie类库向cookie索取</li>
+<li>ShopList</li>
+<li> json</li>
+<li> 本页需要的商品列表，可以通过未来需要学习的$http获取或直接使用jquery的$.post/get获取</li>
+</ul>
+
+
+<h2>基础设定</h2>
+
+<p>  首先，声明一个模块，这个模块是我们用来处理购物车的，我们称呼他为CartApp,这里和之前在模版中设定的完全一致，其余的变量也都与之前设定的完全一致。</p>
+
+<figure class='code'><figcaption><span>controller.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>   <span class="kd">var</span> <span class="nx">CartModule</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;CartApp&#39;</span><span class="p">,</span> <span class="p">[]);</span>
+</span><span class='line'>  <span class="nx">CartModule</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;ShopListController&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span><span class="nx">$filter</span><span class="p">){</span>
+</span><span class='line'>          <span class="c1">// 绑定商品列表到物品列表</span>
+</span><span class='line'>          <span class="nx">$scope</span><span class="p">.</span><span class="nx">items</span> <span class="o">=</span> <span class="nx">ShopList</span><span class="p">;</span>
+</span><span class='line'>          <span class="c1">// 绑定购物车</span>
+</span><span class='line'>          <span class="nx">$scope</span><span class="p">.</span><span class="nx">cart</span> <span class="o">=</span> <span class="nx">cart</span><span class="p">;</span>
+</span><span class='line'>          <span class="c1">// 设定详细页面对应购买默认个数</span>
+</span><span class='line'>          <span class="nx">$scope</span><span class="p">.</span><span class="nx">mount</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>          <span class="c1">// 初始化详细列表</span>
+</span><span class='line'>          <span class="nx">$scope</span><span class="p">.</span><span class="nx">detail</span> <span class="o">=</span> <span class="p">{};</span>
+</span><span class='line'>          <span class="c1">// 设定详细列表显示为否</span>
+</span><span class='line'>          <span class="nx">$scope</span><span class="p">.</span><span class="nx">shopDetail</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>  这里和之前略有不同的是我们的控制器的参数列表中多了一个filter，这里是一个新的知识点是关于过滤器的知识，我们稍后在做解释。</p>
+
+<h2>各个方法实现</h2>
+
+<p>  我们先翻一下笔记，之前我们有记录的所有方法:</p>
+
+<ul>
+<li>$scope.showDetail()
+
+<ul>
+<li>无参数</li>
+<li>这个方法用来控制详情页面是否显示</li>
+</ul>
+</li>
+<li>$scope.bt()
+
+<ul>
+<li>无参数</li>
+<li>此方法用来控制购物车列表的高度，此高度将由购物列表的数目大小决定</li>
+</ul>
+</li>
+<li>$scope.addItemIntoCart()
+
+<ul>
+<li>无参数</li>
+<li>此方法用来向购物车添加商品，商品内容有详情列表决定，（或通过参数决定-下一章解决）</li>
+</ul>
+</li>
+</ul>
+
+
+<p>  好操作就这么多了我们来一一实现：</p>
+
+<figure class='code'><figcaption><span>controller.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$scope</span><span class="p">.</span><span class="nx">showDetail</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">$scope</span><span class="p">.</span><span class="nx">shopDetail</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>  <span class="c1">// 克隆detail</span>
+</span><span class='line'>  <span class="nx">$scope</span><span class="p">.</span><span class="nx">detail</span><span class="o">=</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span> <span class="nx">item</span> <span class="p">));</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>这里值得注意，我们不希望在这里的对象实现双向绑定，姑且猜测所有的angular对象操作都是通过回调和原型继承的方法来获取数值和操作的，那么这里直接使用item会使得item的原型被继承，我们只是需要数据，而不希望双向绑定，so应该将其克隆一遍</p></blockquote>
+
+<figure class='code'><figcaption><span>controller.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$scope</span><span class="p">.</span><span class="nx">bt</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">bt_long</span><span class="o">=</span><span class="nx">$filter</span><span class="p">(</span><span class="s1">&#39;jsonlenght&#39;</span><span class="p">)(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">cart</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="o">:</span> <span class="mf">11.075</span><span class="o">*</span><span class="nx">bt_long</span> <span class="o">+</span><span class="s2">&quot;rem&quot;</span><span class="p">};</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>这里需要讲述一个新的概念，过滤器，在许多的后台框架中都使用了许多类似的方法，比如thinkphp的{xxx|html_trap}</p>
+
+<p>这里也是一样的你完全可以用一样的方法使用过滤器，同时angular也允许你加入自己的过滤器语法如下：</p>
+
+<blockquote><p>XXXModule.filter(&lsquo;filtername&rsquo;,function(){ return function });</p></blockquote>
+
+<p>这没有什么难度，我们之间演示实例就能明白了</p>
+
+<p>Tips:值得注意的是假如你不是在页面中使用过滤器，那么请一定要将$filter加入控制器的参数中来使用</p></blockquote>
+
+<figure class='code'><figcaption><span>controller.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">CartModule</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="s1">&#39;jsonlenght&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">jsonlenghtFilter</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">input</span><span class="p">){</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">jsonLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">item</span> <span class="k">in</span> <span class="nx">input</span><span class="p">){</span>
+</span><span class='line'>          <span class="nx">jsonLength</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">jsonLength</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">jsonlenghtFilter</span><span class="p">;</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>  这里我们需要构建一个用来返回json数组长度的过滤器，input是指输入的内容，我们最后返回了jsonlenghtFilter</p>
+
+<figure class='code'><figcaption><span>controller.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$scope</span><span class="p">.</span><span class="nx">addItemIntoCart</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">find</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">cart</span><span class="p">[</span><span class="s1">&#39;items&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">cartitem</span><span class="p">){</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="nx">cartitem</span><span class="p">.</span><span class="nx">id</span><span class="o">==</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">id</span><span class="p">){</span>
+</span><span class='line'>          <span class="nx">cartitem</span><span class="p">[</span><span class="s1">&#39;mount&#39;</span><span class="p">]</span><span class="o">=</span><span class="nx">cartitem</span><span class="p">.</span><span class="nx">mount</span><span class="o">+</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">mount</span><span class="p">;</span>
+</span><span class='line'>          <span class="nx">find</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">find</span><span class="p">){</span>
+</span><span class='line'>      <span class="nx">$scope</span><span class="p">.</span><span class="nx">cart</span><span class="p">[</span><span class="s1">&#39;items&#39;</span><span class="p">][</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">id</span><span class="p">]</span><span class="o">=</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">detail</span> <span class="p">));</span>
+</span><span class='line'>      <span class="nx">$scope</span><span class="p">.</span><span class="nx">cart</span><span class="p">[</span><span class="s1">&#39;items&#39;</span><span class="p">][</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">id</span><span class="p">][</span><span class="s1">&#39;from&#39;</span><span class="p">]</span><span class="o">=</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">detail</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>  这个是最后一个方法，由于之前忘记在视图页面中添加一键购买，so，我这里没有按照id添加的方法。</p>
+
+<p>  就这样第三篇内容完成了，现在你可以把这个js加入html文件运行一下，你可以自由的添加购物车内容，显示详情，这一阶段的工作已经完成了</p>
+
+<h2>写在最后</h2>
+
+<p>下一篇 我将会继续后面第二个页面的学习，第一个页面的控制器编写已经结束了（触类旁通的学习，剩余的所有功能比如删除购物车内容等等都可以简单使用json数组的方法解决），千里之行始于足下，我希望一步步下去能脚踏实地的学会angular.js</p>
+
+<p>在下一篇中，我将会使用到实际的服务器来进行数据的传输（其实这是不合理的创建一个服务器测试数据并没有什么意义，通常angular通过单元测试后才需要拿实打实的数据测试一下，这样更加节省时间），同时在下一篇中我将会学习简单的关于路由功能，服务和指令，敬请期待下一篇[angular.js]第四章 一个简单的购物车范例(3)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[[markdown] 为什么我要推荐使用markdown而不是富文本]]></title>
@@ -892,7 +1100,8 @@ ng-class=&ldquo;json{class1:true,……}&rdquo;</p></blockquote>
 
 <h2>写在最后</h2>
 
-<p>下一篇 我将会继续后面angular部分的代码，视图的设计已经结束了，当然这部分内容是不足以运行的，需要下一篇[angular.js]第三章 一个简单的购物车范例(2)</p>
+<p>下一篇 我将会继续后面angular部分的代码，第一个页面的视图的设计已经结束了，当然这部分内容是不足以运行的，需要下一篇
+([angular.js]第三章 一个简单的购物车范例(2))[&ldquo;/blog/2016/03/01/angular-2st/&rdquo; ]</p>
 ]]></content>
   </entry>
   
