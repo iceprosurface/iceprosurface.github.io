@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-02-29T22:47:15+08:00</updated>
+  <updated>2016-03-01T21:25:08+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -65,36 +65,33 @@
 
 <p>安装依赖项目</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cd octopress
-</span><span class='line'>ruby &ndash;version # Should report Ruby 1.9.2
-</span><span class='line'>gem install bundler
-</span><span class='line'>bundle install</span></code></pre></td></tr></table></div></figure>
+<p>{% codeblock %}
+cd octopress
+ruby &ndash;version # Should report Ruby 1.9.2
+gem install bundler
+bundle install
+{% endcodeblock %}
 然后使用默认主题（你可以自己下载主题，具体每个主题的制作者都会给出教程）
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>rake install</span></code></pre></td></tr></table></div></figure></p>
+{% codeblock %}
+rake install
+{% endcodeblock %}</p>
 
 <h2>配置Octopress</h2>
 
 <p>首先它不支持中文，我们先要添加中文支持
 \lib\ruby\gems(version)\gems\jekyll-(version)\lib\jekyll\
-<figure class='code'><figcaption><span>convertible.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="nb">name</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
+{% codeblock  convertible.rb lang:rb %}
+self.content = File.read(File.join(base, name))
+{% endcodeblock %}
 修改为
-<figure class='code'><figcaption><span>convertible.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="err">，</span> <span class="nb">name</span><span class="p">),</span><span class="ss">:encoding</span> <span class="o">=&gt;</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span>
-</span></code></pre></td></tr></table></div></figure>
+{% codeblock  convertible.rb lang:rb %}
+self.content = File.read(File.join(base， name),:encoding => &ldquo;utf-8&rdquo;)
+{% endcodeblock %}
 特殊情况下你可能需要在环境变量中添加
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>LANG=zh_cn.UTF-8
-</span><span class='line'>LC_ALL=zh_cn.UTF-8</span></code></pre></td></tr></table></div></figure>
+{% codeblock %}
+LANG=zh_cn.UTF-8
+LC_ALL=zh_cn.UTF-8
+{% endcodeblock %}
 将octopress的文件夹下的<em>config.yml的编码改成UTF-8,修改</em>config.yml，修改url、title、subtitle、author等等。</p>
 
 <h2>移除关于Twitter，google+，google API的支持</h2>
@@ -105,70 +102,51 @@
 
 <p>利用rake new_post[&ldquo;title&rdquo;];可以生成一个新的博文
 然后我们可以写个bat来快速开启
-<figure class='code'><figcaption><span>&ldquo;new.bat&rdquo; </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>F:
-</span><span class='line'><span class="nb">cd </span>F:<span class="se">\b</span>log<span class="se">\b</span>g
-</span><span class='line'>rake new_post
-</span><span class='line'>pause
-</span></code></pre></td></tr></table></div></figure>
+{% codeblock &ldquo;new.bat&rdquo; lang:bash %}
+F:
+cd F:\blog\bg
+rake new_post
+pause
+{% endcodeblock %}
 然后我不懂ruby，不过修改一下文件还是没有问题的
 寻找根目录下的rakefile文件中这里一段
-<figure class='code'><figcaption><span>rakefile </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">task</span> <span class="ss">:new_post</span><span class="p">,</span> <span class="ss">:title</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="o">|</span>
-</span></code></pre></td></tr></table></div></figure>
+{% codeblock rakefile lang:ruby %}
+task :new_post, :title do |t, args|
+{% endcodeblock %}
 在
-<figure class='code'><figcaption><span>rakefile </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">end</span>
-</span><span class='line'>  <span class="n">filename</span> <span class="o">=&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="c1">#{file_root}/#{source_dir}/#{posts_dir}/#{Time.now.strftime(&amp;lsquo;%Y-%m-%d&amp;rsquo;)}-#{title.to_url}.#{new_post_ext}&amp;rdquo;</span>
-</span><span class='line'>  <span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="o">&gt;</span> <span class="nb">puts</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">now</span> <span class="n">is</span> <span class="nb">open</span> <span class="n">by</span> <span class="n">notepad</span><span class="o">++</span><span class="p">:</span><span class="c1">#{filename}&amp;rdquo;</span>
-</span><span class='line'>  <span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="o">&gt;</span> <span class="nb">system</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">start</span> <span class="n">opennote</span><span class="o">.</span><span class="n">bat</span> <span class="c1">#{filename}&amp;rdquo;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
+{% codeblock rakefile lang:ruby %}
+  end
+  filename =&ldquo;#{file_root}/#{source_dir}/#{posts_dir}/#{Time.now.strftime(&lsquo;%Y-%m-%d&rsquo;)}-#{title.to_url}.#{new_post_ext}&rdquo;
+  &ndash;> puts &ldquo;now is open by notepad++:#{filename}&rdquo;
+  &ndash;> system &ldquo;start opennote.bat #{filename}&rdquo;
+end
+{% endcodeblock %}
 添加箭头处的两段代码
-<figure class='code'><figcaption><span>new.bat </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">system</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">start</span> <span class="n">opennote</span><span class="o">.</span><span class="n">bat</span> <span class="c1">#{filename}&amp;rdquo;</span>
-</span></code></pre></td></tr></table></div></figure>
+{% codeblock new.bat lang:ruby %}
+system &ldquo;start opennote.bat #{filename}&rdquo;
+{% endcodeblock %}
 然后创建一个opennote.bat放在更目录下（前提是你用的编辑器必须在windows变量中包含在可以用这个bat）
-<figure class='code'><figcaption><span>&ldquo;new.bat&rdquo; lang=bash </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bat'><span class='line'><span class="k">for</span> <span class="nv">%%a</span> in (<span class="nv">%1</span>) <span class="k">do</span> (
-</span><span class='line'><span class="k">if</span> not <span class="nv">%%a</span> <span class="o">equ</span> &amp;ldquo;&amp;rdquo; (
-</span><span class='line'>    start notepad++ <span class="nv">%%a</span>
-</span><span class='line'>)
-</span><span class='line'>)
-</span><span class='line'>exit
-</span></code></pre></td></tr></table></div></figure>
+{% codeblock &ldquo;new.bat&rdquo; lang=bash %}
+for %%a in (%1) do (
+if not %%a equ &ldquo;&rdquo; (
+    start notepad++ %%a
+)
+)
+exit
+{% endcodeblock %}
 然后以后双击new.bat就可以直接写了（讲道理win的控制台太烂了）
 如果你是在github部署的话可能会遇到和我的一样问题就是CNAME文件无法被识别
 据我所知作者是加入了CNAME识别的我看不懂ruby语言，但不妨碍我加一个识别进去</p>
 
-<p><figure class='code'><figcaption><span>makefile </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="no">FileList</span><span class="o">[&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="c1">#{args.source}/&lt;strong&gt;/.*&amp;rdquo;].exclude(&amp;ldquo;&lt;/strong&gt;/.&amp;rdquo;, &amp;ldquo;&lt;strong&gt;/..&amp;rdquo;, &amp;ldquo;&lt;/strong&gt;/.DS_Store&amp;rdquo;, &amp;ldquo;&lt;em&gt;*/._&lt;/em&gt;&amp;rdquo;).each do |file|</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock makefile lang:ruby %}
+  FileList[&ldquo;#{args.source}/<strong>/.*&rdquo;].exclude(&ldquo;</strong>/.&rdquo;, &ldquo;<strong>/..&rdquo;, &ldquo;</strong>/.DS_Store&rdquo;, &ldquo;<em>*/._</em>&rdquo;).each do |file|
+{% endcodeblock %}</p>
 
 <p>加入CNAME文件的识别</p>
 
-<p><figure class='code'><figcaption><span>makefile </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="no">FileList</span><span class="o">[&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="c1">#{args.source}/&lt;strong&gt;/.*&amp;rdquo;,&amp;ldquo;#{args.source}/CNAME&amp;rdquo;].exclude(&amp;ldquo;&lt;/strong&gt;/.&amp;rdquo;, &amp;ldquo;&lt;strong&gt;/..&amp;rdquo;, &amp;ldquo;&lt;/strong&gt;/.DS_Store&amp;rdquo;, &amp;ldquo;&lt;em&gt;*/._&lt;/em&gt;&amp;rdquo;).each do |file|</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock makefile lang:ruby %}
+  FileList[&ldquo;#{args.source}/<strong>/.*&rdquo;,&ldquo;#{args.source}/CNAME&rdquo;].exclude(&ldquo;</strong>/.&rdquo;, &ldquo;<strong>/..&rdquo;, &ldquo;</strong>/.DS_Store&rdquo;, &ldquo;<em>*/._</em>&rdquo;).each do |file|
+{% endcodeblock %}</p>
 
 <p>这样就ok了，你可以开始使用markdown语言写文章了</p>
 ]]></content>
