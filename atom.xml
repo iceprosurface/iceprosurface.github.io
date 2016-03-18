@@ -4,7 +4,7 @@
   <title><![CDATA[icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-03-15T22:36:44+08:00</updated>
+  <updated>2016-03-18T15:03:26+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -12,6 +12,208 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[lrc cont]]></title>
+    <link href="http://iceprosurface.com/blog/2016/03/18/lrc-cont/"/>
+    <updated>2016-03-18T14:55:41+08:00</updated>
+    <id>http://iceprosurface.com/blog/2016/03/18/lrc-cont</id>
+    <content type="html"><![CDATA[<blockquote><p>本例用于在lrc控制模块，在用于在timeupdate时间中同步更新lrc使用。</p></blockquote>
+
+<p>这里首先放置一个歌词解析模块，下面还需要做一个filter做歌词时间格式化模块</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm">* 歌词解析模块</span>
+</span><span class='line'><span class="cm">*</span>
+</span><span class='line'><span class="cm">* 重复类歌词将repeat至array</span>
+</span><span class='line'><span class="cm">* @author icepro</span>
+</span><span class='line'><span class="cm">* @Time 2016-3-16 17:46:11</span>
+</span><span class='line'><span class="cm">*/</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">lrcParser</span><span class="p">(</span><span class="nx">lrc</span><span class="p">){</span>
+</span><span class='line'>  <span class="c1">// 正则表达式用于已匹配[00:00:00][00:00][00:00.00]</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">reg</span> <span class="o">=</span> <span class="sr">/(\[\d{2}[:]\d{2}([.|:]\d{2}){0,1}\])+(.*)[\n|\r|\r\n]/g</span><span class="p">;</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">lrc</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">match</span><span class="p">(</span><span class="nx">reg</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// 用来push入歌词</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">){</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">i1</span><span class="p">,</span><span class="nx">item1</span><span class="p">){</span>
+</span><span class='line'>          <span class="c1">// 获取时间</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">timeStmp</span> <span class="o">=</span> <span class="nx">item1</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">match</span><span class="p">(</span><span class="sr">/\[\d{2}[:]\d{2}([.|:]\d{2}){0,1}\]/g</span><span class="p">);</span>
+</span><span class='line'>          <span class="c1">// 获取歌词，将时间和换行符去除</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">song</span> <span class="o">=</span> <span class="nx">item1</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\[\d{2}[:]\d{2}([.|:]\d{2}){0,1}\]/g</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[\n|\r|\r\n]/g</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+</span><span class='line'>          <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">timeStmp</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">i2</span><span class="p">,</span><span class="nx">item2</span><span class="p">){</span>
+</span><span class='line'>              <span class="nx">stack</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="s2">&quot;song&quot;</span><span class="o">:</span><span class="nx">song</span><span class="p">,</span><span class="s2">&quot;time&quot;</span><span class="o">:</span><span class="nx">item2</span><span class="p">});</span>
+</span><span class='line'>          <span class="p">});</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="c1">// 依照时间排序</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">stack</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="kd">function</span> <span class="nx">compare</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span><span class="k">return</span> <span class="nx">a</span><span class="p">.</span><span class="nx">time</span><span class="p">.</span><span class="nx">localeCompare</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">time</span><span class="p">);});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<!--more-->
+
+
+<p>下面放置一个歌词控制器模块。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm">* 歌词控制器</span>
+</span><span class='line'><span class="cm">*</span>
+</span><span class='line'><span class="cm">* 我认为在歌词控制中,不停循环遍历数组当然是可以的,不过这样显然太过浪费性能了</span>
+</span><span class='line'><span class="cm">* 事实上我们只需要在重定位的时候遍历一遍数组获得新的index就好了，判断总比循环节省时间吧</span>
+</span><span class='line'><span class="cm">* 以下方法麻烦了点,但是基于这个思路制作lrc控制器也是可以的</span>
+</span><span class='line'><span class="cm">* 当然咯改成遍历肯定要灵活一些，个人习惯不同</span>
+</span><span class='line'><span class="cm">* @author icepro</span>
+</span><span class='line'><span class="cm">* @Time 2016-3-10 11:13:55</span>
+</span><span class='line'><span class="cm">*/</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">lrcControl</span><span class="p">(){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">lrcs</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(),</span>
+</span><span class='line'>      <span class="nx">nowPlay</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">speed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="cm">/* 其中offset偏移时间和动画速率speed还未列入需求 */</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">ini</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">lrcs</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(),</span>
+</span><span class='line'>      <span class="nx">nowPlay</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">speed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="c1">// 设置lrc,lrc格式必须为数组[{song:XXXX,time:[00:00.00]}]格式,判断也是</span>
+</span><span class='line'>  <span class="c1">// 如此，所以传入前必须先通过一个解释器统一格式</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">setLrc</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lrc</span><span class="p">){</span>
+</span><span class='line'>      <span class="nx">lrcs</span> <span class="o">=</span> <span class="nx">lrc</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="c1">// 获得所有的lrc,输出的lrc是经过排序的</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">getAllLrc</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">lrcs</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="c1">// 判断是否需要播放下一节</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">canPlayNext</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">nowtime</span><span class="p">){</span>
+</span><span class='line'>      <span class="nx">nowtime</span> <span class="o">=</span> <span class="s2">&quot;[&quot;</span><span class="o">+</span><span class="nx">nowtime</span><span class="o">+</span><span class="s2">&quot;]&quot;</span><span class="p">;</span>
+</span><span class='line'>      <span class="c1">// console.log(nowtime+&quot;:&quot;+lrcs[nowPlay].time);</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="nx">nowtime</span><span class="p">.</span><span class="nx">localeCompare</span><span class="p">(</span><span class="nx">lrcs</span><span class="p">.</span><span class="nx">length</span><span class="o">&gt;</span><span class="nx">nowPlay</span><span class="o">&amp;&amp;</span><span class="nx">lrcs</span><span class="p">[</span><span class="nx">nowPlay</span><span class="p">].</span><span class="nx">time</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">){</span>
+</span><span class='line'>          <span class="nx">nowPlay</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">lrcs</span><span class="p">[</span><span class="nx">nowPlay</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">song</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+</span><span class='line'>          <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="c1">// 获得现在播放的index次序,在angular下不对数组后续操作重排的话直接可以使用$index即可替换class</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">getThisPlay</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">nowPlay</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="c1">// 重新计算lrc位置</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">reCalculate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">nowtime</span><span class="p">){</span>
+</span><span class='line'>      <span class="nx">nowtime</span> <span class="o">=</span> <span class="s2">&quot;[&quot;</span><span class="o">+</span><span class="nx">nowtime</span><span class="o">+</span><span class="s2">&quot;]&quot;</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">lrcs</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="nx">item</span><span class="p">){</span>
+</span><span class='line'>          <span class="k">if</span><span class="p">(</span><span class="nx">nowtime</span><span class="p">.</span><span class="nx">localeCompare</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">time</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>              <span class="k">return</span> <span class="p">(</span><span class="nx">nowPlay</span> <span class="o">=</span> <span class="p">(</span><span class="nx">i</span><span class="o">-</span><span class="mi">1</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">i</span><span class="o">-</span><span class="mi">1</span><span class="p">));</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">setLrc</span><span class="o">:</span><span class="nx">setLrc</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">reCalculate</span><span class="o">:</span><span class="nx">reCalculate</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">getThisPlay</span><span class="o">:</span><span class="nx">getThisPlay</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">getAllLrc</span><span class="o">:</span><span class="nx">getAllLrc</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">canPlayNext</span><span class="o">:</span><span class="nx">canPlayNext</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[[js]media的使用]]></title>

@@ -7,7 +7,20 @@
 	<meta name="author" content="icepro">
 
 	
-	<meta name="description" content="发布于：2016-03-15 javascript [Js]media的使用 这是一个关于media的播放器模块化控制，用于个人iceplayer播放器 花了一定的时间解决了之前碰到的关于播放器的问题，目前在开发一个html5播放器，基于bootstrap metro UI css &hellip;">
+	<meta name="description" content="发布于：2016-03-18 javascript Lrc Cont 本例用于在lrc控制模块，在用于在timeupdate时间中同步更新lrc使用。 这里首先放置一个歌词解析模块，下面还需要做一个filter做歌词时间格式化模块 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14 &hellip;">
 	
 	<meta name="baidu-site-verification" content="pBXjf7BJLg" />
 	<meta name="google-site-verification" content="r3wiHKHws1s6_Kpzd9mmqykNvbEAwnUf5KqI8UI3aDs" />
@@ -85,6 +98,104 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+	
+	  
+	
+
+	
+
+
+发布于：<time datetime="2016-03-18T14:55:41+08:00" data-updated="true" itemprop="datePublished">2016-03-18</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/javascript/'>javascript</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2016/03/18/lrc-cont/" itemprop="url">Lrc Cont</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<blockquote><p>本例用于在lrc控制模块，在用于在timeupdate时间中同步更新lrc使用。</p></blockquote>
+
+<p>这里首先放置一个歌词解析模块，下面还需要做一个filter做歌词时间格式化模块</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm">* 歌词解析模块</span>
+</span><span class='line'><span class="cm">*</span>
+</span><span class='line'><span class="cm">* 重复类歌词将repeat至array</span>
+</span><span class='line'><span class="cm">* @author icepro</span>
+</span><span class='line'><span class="cm">* @Time 2016-3-16 17:46:11</span>
+</span><span class='line'><span class="cm">*/</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">lrcParser</span><span class="p">(</span><span class="nx">lrc</span><span class="p">){</span>
+</span><span class='line'>  <span class="c1">// 正则表达式用于已匹配[00:00:00][00:00][00:00.00]</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">reg</span> <span class="o">=</span> <span class="sr">/(\[\d{2}[:]\d{2}([.|:]\d{2}){0,1}\])+(.*)[\n|\r|\r\n]/g</span><span class="p">;</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">lrc</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">match</span><span class="p">(</span><span class="nx">reg</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// 用来push入歌词</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">){</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">i1</span><span class="p">,</span><span class="nx">item1</span><span class="p">){</span>
+</span><span class='line'>          <span class="c1">// 获取时间</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">timeStmp</span> <span class="o">=</span> <span class="nx">item1</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">match</span><span class="p">(</span><span class="sr">/\[\d{2}[:]\d{2}([.|:]\d{2}){0,1}\]/g</span><span class="p">);</span>
+</span><span class='line'>          <span class="c1">// 获取歌词，将时间和换行符去除</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">song</span> <span class="o">=</span> <span class="nx">item1</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\[\d{2}[:]\d{2}([.|:]\d{2}){0,1}\]/g</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[\n|\r|\r\n]/g</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+</span><span class='line'>          <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">timeStmp</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">i2</span><span class="p">,</span><span class="nx">item2</span><span class="p">){</span>
+</span><span class='line'>              <span class="nx">stack</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="s2">&quot;song&quot;</span><span class="o">:</span><span class="nx">song</span><span class="p">,</span><span class="s2">&quot;time&quot;</span><span class="o">:</span><span class="nx">item2</span><span class="p">});</span>
+</span><span class='line'>          <span class="p">});</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="c1">// 依照时间排序</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">stack</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="kd">function</span> <span class="nx">compare</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span><span class="k">return</span> <span class="nx">a</span><span class="p">.</span><span class="nx">time</span><span class="p">.</span><span class="nx">localeCompare</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">time</span><span class="p">);});</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+		
+		<a href="/blog/2016/03/18/lrc-cont/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
