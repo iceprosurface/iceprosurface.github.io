@@ -4,7 +4,7 @@
   <title><![CDATA[icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-03-18T15:09:28+08:00</updated>
+  <updated>2016-03-25T22:49:17+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -12,6 +12,379 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[[css+js]一个简单的可左右移动的标签栏]]></title>
+    <link href="http://iceprosurface.com/blog/2016/03/25/tab-js/"/>
+    <updated>2016-03-25T22:37:46+08:00</updated>
+    <id>http://iceprosurface.com/blog/2016/03/25/tab-js</id>
+    <content type="html"><![CDATA[<p>这次在做播放器时碰到了一个严重的问题，一开始打算做个标签页形式的歌单页，来回翻了一下metro UI CSS 发现居然里面的标签页不是可以左右切换的，这样可不太好</p>
+
+<p>而且如果动态添加标签页数量一多就会变成一坨，so考虑了一下，我决定自己造一个轮子算啦。</p>
+
+<p>因为代码很简单，这里就全部没有打注释了</p>
+
+<p>![]</p>
+
+<!-- more -->
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;tab-container&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;nex arrow-right disabled&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;tab-control&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;tabs&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;active&quot;</span> <span class="na">data-id=</span><span class="s">&quot;x1&quot;</span><span class="nt">&gt;</span>我是第一个特别长的标签<span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>              
+</span><span class='line'>          <span class="nt">&lt;li</span> <span class="na">data-id=</span><span class="s">&quot;x2&quot;</span><span class="nt">&gt;</span>我是第二个特别长的标签<span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>              
+</span><span class='line'>          <span class="nt">&lt;li</span> <span class="na">data-id=</span><span class="s">&quot;x3&quot;</span><span class="nt">&gt;</span>我是第三个特别长的标签<span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>              
+</span><span class='line'>          <span class="nt">&lt;li</span> <span class="na">data-id=</span><span class="s">&quot;x4&quot;</span><span class="nt">&gt;</span>我是第四个特别长的标签<span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/ul&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;pre arrow-left&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;clear:both;&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">class =</span><span class="err"> </span><span class="s">&quot;tab-content&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;x1&quot;</span> <span class="na">class=</span><span class="s">&quot;active&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          这是一大段一大段一大段一大段一大段一大段一大段一大段一大段一大段一大段一大段一大段的文字
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;x2&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          这是一段你的文字文字
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;x3&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          黄颜色在西藏人眼里是最有专用特性的色彩,并可以呈现,固定身份,有典型的符号意义。传统的藏族绘画用色口诀理论中说到:“格西石黄待活佛,土黄你把金
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;x4&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          他的肖像也常受你小口的親吻，與自然同在一個脈搏裡跳動，前途是那里，沒福見著你的父親，但已往的教訓，卻沒有同樣的碎痕，她多疼你！只許你獨身；因為有了伴多少總得叫你分心，梨夢湖與西子湖，他就捲了起來，與你自己隨口的小曲，小馬，卻偏不作聲，給你的頸根與胸膛一半日的自由，這不取費的最珍貴的補劑便永遠供你的受用；只要你認識了這一部書，他那資質的敏慧，我們的鏈永遠是制定我們行動的上司！
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面这一段js代码的泛用性不是太高，后面可以考虑重构一遍</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.tabs li&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="s2">&quot;#&quot;</span><span class="o">+</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.tab-content div&quot;</span><span class="p">),</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="nx">item</span><span class="p">){</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">(</span><span class="nx">item</span><span class="p">).</span><span class="nx">hide</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.tabs li&quot;</span><span class="p">),</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="nx">item</span><span class="p">){</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">(</span><span class="nx">item</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">$</span><span class="p">(</span><span class="nx">id</span><span class="p">).</span><span class="nx">show</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.pre&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">now</span> <span class="o">=</span>  <span class="nb">parseInt</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.tabs&quot;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">))</span><span class="o">-</span><span class="mi">240</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">now</span><span class="o">&lt;=</span><span class="p">(</span><span class="o">-</span><span class="mi">240</span><span class="o">*</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.tabs&quot;</span><span class="p">).</span><span class="nx">children</span><span class="p">().</span><span class="nx">length</span><span class="p">)){</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.tabs&quot;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span><span class="o">-</span><span class="mi">240</span><span class="o">*</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.tabs&quot;</span><span class="p">).</span><span class="nx">children</span><span class="p">().</span><span class="nx">length</span><span class="o">-</span><span class="mi">2</span><span class="p">));</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s2">&quot;disabled&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.tabs&quot;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span><span class="nx">now</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">now</span><span class="o">&lt;=-</span><span class="mi">240</span><span class="p">){</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.nex&quot;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s2">&quot;disabled&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.nex&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">now</span> <span class="o">=</span>  <span class="nb">parseInt</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.tabs&quot;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">))</span><span class="o">+</span><span class="mi">240</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">now</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">){</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.tabs&quot;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s2">&quot;disabled&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.tabs&quot;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span><span class="nx">now</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">now</span><span class="o">&gt;=</span><span class="p">(</span><span class="o">-</span><span class="mi">240</span><span class="o">*</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.tabs&quot;</span><span class="p">).</span><span class="nx">children</span><span class="p">().</span><span class="nx">length</span><span class="p">)){</span>
+</span><span class='line'>      <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.pre&quot;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s2">&quot;disabled&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这段css的颜色简直有毒算啦……就先酱吧</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.tab-container</span><span class="p">{</span>
+</span><span class='line'>  <span class="k">width</span><span class="o">:</span><span class="m">40</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">color</span><span class="o">:</span> <span class="m">#FFFFFF</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.tab-control</span><span class="p">{</span>
+</span><span class='line'>  <span class="k">float</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">width</span><span class="o">:</span><span class="m">33</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">overflow</span><span class="o">:</span><span class="k">hidden</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.tabs</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">left</span><span class="o">:</span><span class="m">0px</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">width</span><span class="o">:</span><span class="m">10000</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">float</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">list-style-type</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">padding</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">margin</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">position</span><span class="o">:</span> <span class="k">relative</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">text-align</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">transition</span><span class="o">:</span> <span class="n">all</span> <span class="m">0.2s</span> <span class="n">ease</span><span class="o">-</span><span class="n">in</span><span class="o">-</span><span class="n">out</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">-</span><span class="n">moz</span><span class="o">-</span><span class="n">transition</span><span class="o">:</span> <span class="n">all</span> <span class="m">0.2s</span> <span class="n">ease</span><span class="o">-</span><span class="n">in</span><span class="o">-</span><span class="n">out</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">-</span><span class="n">o</span><span class="o">-</span><span class="n">transition</span><span class="o">:</span> <span class="n">all</span> <span class="m">0.2s</span> <span class="n">ease</span><span class="o">-</span><span class="n">in</span><span class="o">-</span><span class="n">out</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">transition</span><span class="o">:</span> <span class="n">all</span> <span class="m">0.2s</span> <span class="n">ease</span><span class="o">-</span><span class="n">in</span><span class="o">-</span><span class="n">out</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.tabs</span> <span class="nt">li</span><span class="nd">:hover</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">margin-top</span><span class="o">:</span> <span class="m">0</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">padding-bottom</span><span class="o">:</span><span class="m">1</span><span class="o">.</span><span class="m">25</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">background</span><span class="o">:</span> <span class="m">#703688</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.tabs</span> <span class="nc">.active</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">background</span><span class="o">:</span> <span class="m">#612e76</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.tabs</span> <span class="nc">.active</span><span class="nd">:hover</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">background</span><span class="o">:</span> <span class="m">#612e76</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.tabs</span> <span class="nt">li</span> <span class="p">{</span>
+</span><span class='line'>  <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">transition</span><span class="o">:</span> <span class="n">all</span> <span class="m">0.2s</span> <span class="n">ease</span><span class="o">-</span><span class="n">in</span><span class="o">-</span><span class="n">out</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">-</span><span class="n">moz</span><span class="o">-</span><span class="n">transition</span><span class="o">:</span> <span class="n">all</span> <span class="m">0.2s</span> <span class="n">ease</span><span class="o">-</span><span class="n">in</span><span class="o">-</span><span class="n">out</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">-</span><span class="n">o</span><span class="o">-</span><span class="n">transition</span><span class="o">:</span> <span class="n">all</span> <span class="m">0.2s</span> <span class="n">ease</span><span class="o">-</span><span class="n">in</span><span class="o">-</span><span class="n">out</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">transition</span><span class="o">:</span> <span class="n">all</span> <span class="m">0.2s</span> <span class="n">ease</span><span class="o">-</span><span class="n">in</span><span class="o">-</span><span class="n">out</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">width</span><span class="o">:</span><span class="m">10</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">float</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">display</span><span class="o">:</span> <span class="k">block</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">padding</span><span class="o">:</span> <span class="m">1</span><span class="o">.</span><span class="m">25</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">border</span><span class="o">-</span><span class="n">radius</span><span class="o">:</span> <span class="m">8px</span> <span class="m">8px</span> <span class="m">0</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">background</span><span class="o">:</span> <span class="m">#8e44ad</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">margin-top</span><span class="o">:</span> <span class="m">0</span><span class="o">.</span><span class="m">325</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">padding-bottom</span><span class="o">:</span> <span class="m">0</span><span class="o">.</span><span class="m">925</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">overflow</span><span class="o">:</span><span class="k">hidden</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">height</span><span class="o">:</span><span class="m">1</span><span class="o">.</span><span class="m">25</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">text</span><span class="o">-</span><span class="k">overflow</span><span class="o">:</span><span class="n">ellipsis</span><span class="p">;</span>   
+</span><span class='line'>  <span class="k">white-space</span><span class="o">:</span> <span class="k">nowrap</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.pre</span><span class="p">{</span>
+</span><span class='line'>  <span class="k">top</span><span class="o">:</span><span class="m">1</span><span class="o">.</span><span class="m">375</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">margin-left</span><span class="o">:</span><span class="m">1</span><span class="o">.</span><span class="m">25</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">margin-right</span><span class="o">:</span><span class="m">1</span><span class="o">.</span><span class="m">25</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">float</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">position</span><span class="o">:</span> <span class="k">relative</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.arrow-right</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">height</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border-bottom</span><span class="o">:</span> <span class="m">15px</span> <span class="k">solid</span> <span class="k">transparent</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border-top</span><span class="o">:</span> <span class="m">15px</span> <span class="k">solid</span> <span class="k">transparent</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border-right</span><span class="o">:</span> <span class="m">15px</span> <span class="k">solid</span> <span class="m">#FFD700</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">line-height</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.arrow-left</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">height</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border-bottom</span><span class="o">:</span> <span class="m">15px</span> <span class="k">solid</span> <span class="k">transparent</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border-top</span><span class="o">:</span> <span class="m">15px</span> <span class="k">solid</span> <span class="k">transparent</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">border-left</span><span class="o">:</span> <span class="m">15px</span> <span class="k">solid</span> <span class="m">#FFD700</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">line-height</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.nex</span><span class="p">{</span>
+</span><span class='line'>  <span class="k">top</span><span class="o">:</span><span class="m">1</span><span class="o">.</span><span class="m">375</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">margin-left</span><span class="o">:</span><span class="m">1</span><span class="o">.</span><span class="m">25</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">margin-right</span><span class="o">:</span><span class="m">1</span><span class="o">.</span><span class="m">25</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">float</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">position</span><span class="o">:</span> <span class="k">relative</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nt">div</span><span class="p">{</span>
+</span><span class='line'>  <span class="k">position</span><span class="o">:</span><span class="k">relative</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.disabled</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">pointer</span><span class="o">-</span><span class="n">events</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.tab-content</span> <span class="nc">.active</span><span class="p">{</span>
+</span><span class='line'>  <span class="k">display</span><span class="o">:</span><span class="k">block</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.tab-content</span> <span class="o">&gt;</span> <span class="nt">div</span><span class="p">{</span>
+</span><span class='line'>  <span class="k">padding</span><span class="o">:</span><span class="m">3</span><span class="o">.</span><span class="m">75</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">display</span><span class="o">:</span><span class="k">none</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.tab-content</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">height</span><span class="o">:</span><span class="m">20</span><span class="n">rem</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">background</span><span class="o">:</span> <span class="m">#612e76</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[[javascript]lrc控制器试验]]></title>
