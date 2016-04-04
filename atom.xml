@@ -4,7 +4,7 @@
   <title><![CDATA[icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-03-25T22:52:35+08:00</updated>
+  <updated>2016-04-04T17:22:27+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -12,6 +12,367 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[[python]基于python制作上海海洋大学绩点计算器]]></title>
+    <link href="http://iceprosurface.com/blog/2016/04/04/base-on-python-cal/"/>
+    <updated>2016-04-04T17:07:49+08:00</updated>
+    <id>http://iceprosurface.com/blog/2016/04/04/base-on-python-cal</id>
+    <content type="html"><![CDATA[<h2>初衷</h2>
+
+<p>最早只是觉得手工计算绩点比较麻烦，so用js写了一个绩点计算器，当然咯，之前是有人写过的不过现在我打算让其完成自动化的过程，首先了，不得不提提海大的学风系统了
+它大量使用了iframe框架，虽然说作为一个站内站点，不需要做SEO但是讲道理，这里面js跨域的问题就觉得麻烦么？
+so，我把最初的js的版本放弃了。</p>
+
+<h2>程序设计</h2>
+
+<p>这里就不去把抓包数据分析了，直接上代码</p>
+
+<p>首先讲述一下思路，因为我们学校使用了类似于sessionid的客户端cookie（不理解为什么这么做），so我们不能直接访问入口，必须要访问门户获取一次cookie</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c">#登录的主页面  </span>
+</span><span class='line'><span class="n">hosturl</span> <span class="o">=</span> <span class="s">&#39;http://urp.shou.edu.cn/&#39;</span>
+</span><span class='line'><span class="c">#post数据接收和处理的页面（我们要向这个页面发送我们构造的Post数据）  </span>
+</span><span class='line'><span class="n">posturl</span> <span class="o">=</span> <span class="s">&#39;http://urp.shou.edu.cn/loginAction.do&#39;</span>
+</span><span class='line'><span class="c">#设置一个cookie处理器，它负责从服务器下载cookie到本地，并且在发送请求时带上本地的cookie  </span>
+</span><span class='line'><span class="n">cj</span> <span class="o">=</span> <span class="n">cookielib</span><span class="o">.</span><span class="n">LWPCookieJar</span><span class="p">()</span>
+</span><span class='line'><span class="n">cookie_support</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">HTTPCookieProcessor</span><span class="p">(</span><span class="n">cj</span><span class="p">)</span>
+</span><span class='line'><span class="n">opener</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">cookie_support</span><span class="p">,</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">HTTPHandler</span><span class="p">)</span>
+</span><span class='line'><span class="n">urllib2</span><span class="o">.</span><span class="n">install_opener</span><span class="p">(</span><span class="n">opener</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#打开登录主页面（他的目的是从页面下载cookie，这样我们在再送post数据时就有cookie了，否则发送不成功）  </span>
+</span><span class='line'><span class="n">h</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">hosturl</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>接下来我们读取一下设置好的用户名和密码</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">cf</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+</span><span class='line'><span class="n">cf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;./config.conf&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c">#读取用户全局设置</span>
+</span><span class='line'><span class="n">username</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;globe&quot;</span><span class="p">,</span><span class="s">&quot;username&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">password</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;globe&quot;</span><span class="p">,</span> <span class="s">&quot;password&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#构造header，一般header至少要包含一下两项。学校抓包数据表明为这两项</span>
+</span><span class='line'><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;User-Agent&#39;</span> <span class="p">:</span> <span class="s">&#39;Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1&#39;</span><span class="p">,</span>
+</span><span class='line'>                 <span class="s">&#39;Referer&#39;</span> <span class="p">:</span> <span class="s">&#39;http://urp.shou.edu.cn/&#39;</span><span class="p">}</span>
+</span><span class='line'><span class="c">#构造Post数据  </span>
+</span><span class='line'><span class="n">postData</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>                      <span class="s">&#39;zjh&#39;</span> <span class="p">:</span> <span class="n">username</span><span class="p">,</span>
+</span><span class='line'>                      <span class="s">&#39;mm&#39;</span> <span class="p">:</span> <span class="n">password</span><span class="p">,</span>
+</span><span class='line'>                      <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span> <span class="s">&#39;检验post数据是否正确&#39;</span>
+</span><span class='line'><span class="k">print</span> <span class="n">postData</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#需要给Post数据编码  </span>
+</span><span class='line'><span class="n">postData</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">postData</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后通过urllib2提供的request方法来向指定Url发送我们构造的数据，并完成登录过程</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">request</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">posturl</span><span class="p">,</span> <span class="n">postData</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="s">&#39;校验request是否成功&#39;</span>
+</span><span class='line'><span class="k">print</span> <span class="n">request</span>
+</span><span class='line'><span class="n">response</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</span><span class='line'><span class="n">text</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span class='line'><span class="k">print</span> <span class="s">&#39;校验是否进入学校登陆页面&#39;</span>
+</span><span class='line'><span class="k">print</span> <span class="n">text</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>接下来获取我们学分页面</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c">##构造get的header，一般header至少要包含一下两项。学校抓包数据表明为这两项</span>
+</span><span class='line'><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;User-Agent&#39;</span> <span class="p">:</span> <span class="s">&#39;Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1&#39;</span><span class="p">,</span>
+</span><span class='line'>                 <span class="s">&#39;Referer&#39;</span> <span class="p">:</span> <span class="s">&#39;http://urp.shou.edu.cn/menu/s_main.jsp&#39;</span><span class="p">}</span>
+</span><span class='line'><span class="c">##我们需要get的页面 </span>
+</span><span class='line'><span class="n">geturl</span> <span class="o">=</span> <span class="s">&#39;http://urp.shou.edu.cn/bxqcjcxAction.do&#39;</span>
+</span><span class='line'><span class="n">request</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">geturl</span><span class="p">)</span>
+</span><span class='line'><span class="c">#获得返回值</span>
+</span><span class='line'><span class="n">response</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</span><span class='line'><span class="n">text</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span class='line'><span class="k">print</span> <span class="s">&#39;校验是否获得目标学分&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>获得了之后我们把它保存在同级目录下，然后在结尾处加上我们的js代码，这里我已经把js处理成单行的，恐怕没有什么好的办法还原了，so将就着看吧</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c">#字符串格式转码</span>
+</span><span class='line'><span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;GBK&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;UTF-8&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="c">#替换计算系统</span>
+</span><span class='line'><span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&quot;&lt;/html&gt;&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">upload</span><span class="o">=</span><span class="s">&#39;&lt;script src=&quot;http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js&quot;&gt;&lt;/script&gt;&lt;script&gt;function getPoints(t){return t.match(&quot;通过&quot;)?3.3:t.match(&quot;优秀&quot;)?3.3:t.match(&quot;良好&quot;)?2.3:t.match(&quot;通过&quot;)?1:t&gt;=90?4:t&gt;=85?3.7:t&gt;=82?3.3:t&gt;=78?3:t&gt;=75?2.7:t&gt;=72?2.3:t&gt;=68?2:t&gt;=66?1.7:t&gt;=64?1.5:t&gt;=60?1:0}function getPoint(t,n,r){return sumt=0,suml=0,$.each(t,function(t){0!=t&amp;&amp;(sumt+=r[t]*n[t],suml+=n[t])}),sumt/suml}$(document).ready(function(){var t=new Array,n=new Array,r=new Array;$(&quot;#user tr&quot;).each(function(e){0!=e&amp;&amp;(r[e]=parseFloat($.trim(this.children[4].innerHTML)),n[e]=$.trim(this.children[6].innerHTML),t[e]=getPoints(n[e]))});var e=getPoint(n,r,t);alert(e)});&lt;/script&gt;&lt;/html&gt;&#39;</span>
+</span><span class='line'><span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span><span class="n">upload</span><span class="p">,</span><span class="n">text</span><span class="p">)</span>
+</span><span class='line'><span class="c">#将文件标示为utf类型</span>
+</span><span class='line'><span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&quot;&lt;head&gt;&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">upload</span><span class="o">=</span><span class="s">&#39;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;&#39;</span>
+</span><span class='line'><span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span><span class="n">upload</span><span class="p">,</span><span class="n">text</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="n">text</span>
+</span><span class='line'><span class="c">#打开文本</span>
+</span><span class='line'><span class="c"># text = unicode(text, &quot;utf-8&quot;)</span>
+</span><span class='line'><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;.\index.html&quot;</span><span class="p">,</span><span class="s">&quot;wt&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c">#输出到文本</span>
+</span><span class='line'><span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</span><span class='line'><span class="c">#关闭文本</span>
+</span><span class='line'><span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span class='line'><span class="c">#打开文件</span>
+</span><span class='line'><span class="n">url</span> <span class="o">=</span> <span class="s">&#39;.\index.html&#39;</span>
+</span><span class='line'><span class="n">webbrowser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>完整代码如下</p></blockquote>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c">#!/usr/bin/python  </span>
+</span><span class='line'><span class="c">#coding:utf-8</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">HTMLParser</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">urlparse</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">urllib</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">urllib2</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">cookielib</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">string</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">re</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">sys</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">webbrowser</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">codecs</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">ConfigParser</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">cf</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+</span><span class='line'><span class="n">cf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;./config.conf&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c">#读取用户全局设置</span>
+</span><span class='line'><span class="n">username</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;globe&quot;</span><span class="p">,</span><span class="s">&quot;username&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">password</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;globe&quot;</span><span class="p">,</span> <span class="s">&quot;password&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c">#登录的主页面  </span>
+</span><span class='line'><span class="n">hosturl</span> <span class="o">=</span> <span class="s">&#39;http://urp.shou.edu.cn/&#39;</span>
+</span><span class='line'><span class="c">#post数据接收和处理的页面（我们要向这个页面发送我们构造的Post数据）  </span>
+</span><span class='line'><span class="n">posturl</span> <span class="o">=</span> <span class="s">&#39;http://urp.shou.edu.cn/loginAction.do&#39;</span>
+</span><span class='line'><span class="c">#设置一个cookie处理器，它负责从服务器下载cookie到本地，并且在发送请求时带上本地的cookie  </span>
+</span><span class='line'><span class="n">cj</span> <span class="o">=</span> <span class="n">cookielib</span><span class="o">.</span><span class="n">LWPCookieJar</span><span class="p">()</span>
+</span><span class='line'><span class="n">cookie_support</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">HTTPCookieProcessor</span><span class="p">(</span><span class="n">cj</span><span class="p">)</span>
+</span><span class='line'><span class="n">opener</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">cookie_support</span><span class="p">,</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">HTTPHandler</span><span class="p">)</span>
+</span><span class='line'><span class="n">urllib2</span><span class="o">.</span><span class="n">install_opener</span><span class="p">(</span><span class="n">opener</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#打开登录主页面（他的目的是从页面下载cookie，这样我们在再送post数据时就有cookie了，否则发送不成功）  </span>
+</span><span class='line'><span class="n">h</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">hosturl</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#构造header，一般header至少要包含一下两项。学校抓包数据表明为这两项</span>
+</span><span class='line'><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;User-Agent&#39;</span> <span class="p">:</span> <span class="s">&#39;Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1&#39;</span><span class="p">,</span>
+</span><span class='line'>                 <span class="s">&#39;Referer&#39;</span> <span class="p">:</span> <span class="s">&#39;http://urp.shou.edu.cn/&#39;</span><span class="p">}</span>
+</span><span class='line'><span class="c">#构造Post数据  </span>
+</span><span class='line'><span class="n">postData</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>                      <span class="s">&#39;zjh&#39;</span> <span class="p">:</span> <span class="n">username</span><span class="p">,</span>
+</span><span class='line'>                      <span class="s">&#39;mm&#39;</span> <span class="p">:</span> <span class="n">password</span><span class="p">,</span>
+</span><span class='line'>                      <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span> <span class="s">&#39;检验post数据是否正确&#39;</span>
+</span><span class='line'><span class="k">print</span> <span class="n">postData</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#需要给Post数据编码  </span>
+</span><span class='line'><span class="n">postData</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">postData</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#通过urllib2提供的request方法来向指定Url发送我们构造的数据，并完成登录过程  </span>
+</span><span class='line'><span class="n">request</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">posturl</span><span class="p">,</span> <span class="n">postData</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="s">&#39;校验request是否成功&#39;</span>
+</span><span class='line'><span class="k">print</span> <span class="n">request</span>
+</span><span class='line'><span class="n">response</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</span><span class='line'><span class="n">text</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span class='line'><span class="k">print</span> <span class="s">&#39;校验是否进入学校登陆页面&#39;</span>
+</span><span class='line'><span class="k">print</span> <span class="n">text</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">##构造get的header，一般header至少要包含一下两项。学校抓包数据表明为这两项</span>
+</span><span class='line'><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;User-Agent&#39;</span> <span class="p">:</span> <span class="s">&#39;Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1&#39;</span><span class="p">,</span>
+</span><span class='line'>                 <span class="s">&#39;Referer&#39;</span> <span class="p">:</span> <span class="s">&#39;http://urp.shou.edu.cn/menu/s_main.jsp&#39;</span><span class="p">}</span>
+</span><span class='line'><span class="c">##我们需要get的页面 </span>
+</span><span class='line'><span class="n">geturl</span> <span class="o">=</span> <span class="s">&#39;http://urp.shou.edu.cn/bxqcjcxAction.do&#39;</span>
+</span><span class='line'><span class="n">request</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">geturl</span><span class="p">)</span>
+</span><span class='line'><span class="c">#获得返回值</span>
+</span><span class='line'><span class="n">response</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</span><span class='line'><span class="n">text</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span class='line'><span class="k">print</span> <span class="s">&#39;校验是否获得目标学分&#39;</span>
+</span><span class='line'><span class="c">#字符串格式转码</span>
+</span><span class='line'><span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;GBK&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;UTF-8&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="c">#替换计算系统</span>
+</span><span class='line'><span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&quot;&lt;/html&gt;&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">upload</span><span class="o">=</span><span class="s">&#39;&lt;script src=&quot;http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js&quot;&gt;&lt;/script&gt;&lt;script&gt;function getPoints(t){return t.match(&quot;通过&quot;)?3.3:t.match(&quot;优秀&quot;)?3.3:t.match(&quot;良好&quot;)?2.3:t.match(&quot;通过&quot;)?1:t&gt;=90?4:t&gt;=85?3.7:t&gt;=82?3.3:t&gt;=78?3:t&gt;=75?2.7:t&gt;=72?2.3:t&gt;=68?2:t&gt;=66?1.7:t&gt;=64?1.5:t&gt;=60?1:0}function getPoint(t,n,r){return sumt=0,suml=0,$.each(t,function(t){0!=t&amp;&amp;(sumt+=r[t]*n[t],suml+=n[t])}),sumt/suml}$(document).ready(function(){var t=new Array,n=new Array,r=new Array;$(&quot;#user tr&quot;).each(function(e){0!=e&amp;&amp;(r[e]=parseFloat($.trim(this.children[4].innerHTML)),n[e]=$.trim(this.children[6].innerHTML),t[e]=getPoints(n[e]))});var e=getPoint(n,r,t);alert(e)});&lt;/script&gt;&lt;/html&gt;&#39;</span>
+</span><span class='line'><span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span><span class="n">upload</span><span class="p">,</span><span class="n">text</span><span class="p">)</span>
+</span><span class='line'><span class="c">#将文件标示为utf类型</span>
+</span><span class='line'><span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&quot;&lt;head&gt;&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">upload</span><span class="o">=</span><span class="s">&#39;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;&#39;</span>
+</span><span class='line'><span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span><span class="n">upload</span><span class="p">,</span><span class="n">text</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="n">text</span>
+</span><span class='line'><span class="c">#打开文本</span>
+</span><span class='line'><span class="c"># text = unicode(text, &quot;utf-8&quot;)</span>
+</span><span class='line'><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;.\index.html&quot;</span><span class="p">,</span><span class="s">&quot;wt&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c">#输出到文本</span>
+</span><span class='line'><span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</span><span class='line'><span class="c">#关闭文本</span>
+</span><span class='line'><span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span class='line'><span class="c">#打开文件</span>
+</span><span class='line'><span class="n">url</span> <span class="o">=</span> <span class="s">&#39;.\index.html&#39;</span>
+</span><span class='line'><span class="n">webbrowser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[[css+js]一个简单的可左右移动的标签栏]]></title>
