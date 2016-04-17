@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Angular | icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/blog/categories/angular/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-04-17T19:43:10+08:00</updated>
+  <updated>2016-04-17T19:46:46+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -20,7 +20,8 @@
     <id>http://iceprosurface.com/blog/2016/04/16/angular-4th</id>
     <content type="html"><![CDATA[<p>生产模拟仿真考试考完终于可以继续写博客了，这里我要把之前的坑填完，这里将会讲述关于angular的路由功能，服务和指令。</p>
 
-<blockquote><p>此次更新只是预留一个位置，内容将会在2天内放上blog</p></blockquote>
+<blockquote><p><del>此次更新只是预留一个位置，内容将会在2天内放上blog</del>
+现在已经放上了</p></blockquote>
 
 <!-- more -->
 
