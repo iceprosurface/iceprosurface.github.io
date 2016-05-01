@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://iceprosurface.com/blog/2016/05/01/iceplayer-1st/</loc>
+<lastmod>2016-05-01T21:55:41+08:00</lastmod>
+</url>
+<url>
 <loc>http://iceprosurface.com/blog/2016/04/16/angular-4th/</loc>
 <lastmod>2016-04-16T18:47:31+08:00</lastmod>
 </url>
@@ -64,6 +68,12 @@
 </url>
 <url>
 <loc>http://iceprosurface.com/blog/categories/python/</loc>
+</url>
+<url>
+<loc>http://iceprosurface.com/blog/categories/electron/</loc>
+</url>
+<url>
+<loc>http://iceprosurface.com/blog/categories/node/</loc>
 </url>
 <url>
 <loc>http://iceprosurface.com/posts/2/</loc>

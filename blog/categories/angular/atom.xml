@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Angular | icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/blog/categories/angular/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-04-17T19:47:44+08:00</updated>
+  <updated>2016-05-01T23:47:55+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -12,6 +12,69 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[[Iceplayer] 第一篇 Iceplayer个人音乐播放器]]></title>
+    <link href="http://iceprosurface.com/blog/2016/05/01/iceplayer-1st/"/>
+    <updated>2016-05-01T21:55:41+08:00</updated>
+    <id>http://iceprosurface.com/blog/2016/05/01/iceplayer-1st</id>
+    <content type="html"><![CDATA[<blockquote><p>时隔半月，我又开始码字了，这次带来的是electron的使用方案，制作一个桌面播放器。</p>
+
+<h2>起因</h2>
+
+<p>说起音乐播放器，大抵我只想需要一个能放音乐的就好，说来也是有点奇怪，我一同学对现在的播放器横不满意为什么呢原因有三点</p></blockquote>
+
+<ol>
+<li>不能拖拽载入音乐（这个理应是一个简单好用的功能）</li>
+<li>必须使用网络源歌词（完全能理解，商业公司总是要推销自己的ip的是吧？）</li>
+<li>自定义的歌单永远都是从云端下载的，本地歌单只能分一个大类</li>
+</ol>
+
+
+<p>那么这样就有了一个需求了不是么？</p>
+
+<p>于是乎我决定，就此做一个音乐播放器来练手，当然一开始并不需要什么代码，我们需要先分析一下需要的东西。</p>
+
+<h2>需求分析</h2>
+
+<p>首先，音乐器必须要满足本身最基本的功能，播放，其次才是其他功能。首先就把java抛弃了，因为按我的水平写个漂亮的ui着实有点困难，而C目前只是停留在变量认识的基础上，不做考虑，那最好的策略是什么呢？</p>
+
+<p>很快就能想到一个开发包，nwjs，不过这个社区不是很发达（主要是文档不够多），于是我转而投向了一个更好的封装，electron。</p>
+
+<p>HTML+css+js就能做出一个不错的桌面应用，这显然对我有很大的魅力，这样就选择好了框架。</p>
+
+<p>首先仔细思考了一下我们最基本需要的是什么呢？</p>
+
+<ul>
+<li>播放器内核</li>
+<li>控制器（用来切换各种页面的）</li>
+<li>歌词播放器</li>
+<li>歌单系统</li>
+<li>UI</li>
+</ul>
+
+
+<p>这样一来事情就简单了，如果需要在各个页面之间切换而无疑问angular可以为我们提供不错的服务，并且单个模块测试起来是很简单的。</p>
+
+<p>至于ui，个人比较喜欢metro风格（其实就是和win比较搭配），所以依旧使用了metro UI CSS （当然咯你也可以使用bootstrap的flatUI 本质上应该没有什么区别）</p>
+
+<h2>播放器内核</h2>
+
+<p>对于播放器，首先需要满足的基本功能有 播放，停止， 暂停 ，静音……blabla 这些统统都不用管，你照着HTML5的官方文档照着封装一下就好，这里只需要考虑和歌词系统的接口问题。</p>
+
+<p>我的计划是，用歌词系统向控制器请求一个时间用来循环校验是否切歌词，这样需要按时间开放给控制器一个接口即可。</p>
+
+<h2>歌单系统</h2>
+
+<p>歌单系统并不困难，利用services直接从本地读json就好，这点实现并不困难。（目前还不需要增加或者删除歌单的功能）</p>
+
+<h2>歌词系统</h2>
+
+<p>歌词系统是一个比较麻烦的东西，主要大量歌词的格式不一样，所以需要一个解析器，还需要一个统一时间的转换器。</p>
+
+<p>这样一个基础的框架就搭好了（还是等我下次在码字吧，状态不好；）</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[[angular.js]第四章 一个简单的购物车范例(3)]]></title>
