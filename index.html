@@ -7,7 +7,8 @@
 	<meta name="author" content="icepro">
 
 	
-	<meta name="description" content="发布于：2016-05-01 angular, electron, node [Iceplayer] 第一篇 Iceplayer个人音乐播放器 时隔半月，我又开始码字了，这次带来的是electron的使用方案，制作一个桌面播放器。 起因 说起音乐播放器，大抵我只想需要一个能放音乐的就好， &hellip;">
+	<meta name="description" content="发布于：2016-05-16 mac, nomal [Mac]换了一台新电脑 换了一台新电脑，这篇文章只是测试一下是否可以使用并记录一下mac上的配置 配置ruby和gem 首先要配置homebrew，这里就不多说了直接上官网就好
+由于我有之前的文档备份就不用从github上面啦了， &hellip;">
 	
 	<meta name="baidu-site-verification" content="pBXjf7BJLg" />
 	<meta name="google-site-verification" content="r3wiHKHws1s6_Kpzd9mmqykNvbEAwnUf5KqI8UI3aDs" />
@@ -85,6 +86,141 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+	
+	  
+	
+
+	
+
+
+发布于：<time datetime="2016-05-16T11:19:46+08:00" data-updated="true" itemprop="datePublished">2016-05-16</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/mac/'>mac</a>, <a class='category' href='/blog/categories/nomal/'>nomal</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2016/05/16/mac-use/" itemprop="url">[Mac]换了一台新电脑</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<blockquote><p>换了一台新电脑，这篇文章只是测试一下是否可以使用并记录一下mac上的配置</p></blockquote>
+
+<h2>配置ruby和gem</h2>
+
+<p>首先要配置homebrew，这里就不多说了直接上官网就好
+由于我有之前的文档备份就不用从github上面啦了，不过ssh没有保存，所以重新设置一下就好
+gem是自带的不用配置，不过呢国内的环境你懂的，我们得配置淘宝源</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>brew install rbenv
+</span><span class='line'><span class="c">#先安装apple gcc 否则无法编译</span>
+</span><span class='line'>brew install apple-gcc42
+</span><span class='line'>rbenv install 1.9.3-p0
+</span><span class='line'><span class="c"># 这里需要给gem目录权限，应该给755的不过自用直接给777了</span>
+</span><span class='line'>sudo chmod -R <span class="m">777</span> /Library/Ruby/Gems/2.0.0
+</span><span class='line'>gem <span class="nb">source</span> -a http://mirrors.aliyun.com/rubygems/
+</span><span class='line'>gem <span class="nb">source</span> -r https://rubygems.org/
+</span><span class='line'>gem install bundler
+</span><span class='line'>rbenv rehash
+</span><span class='line'><span class="nb">cd</span> /octopress/
+</span><span class='line'>bundler install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个时候你会发现还是装不了全是connect fail
+然后我们惯例替换成淘宝源</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle config mirror.https://rubygems.org https://ruby.taobao.org
+</span><span class='line'>bundle install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>octopress配置好了（比win简单不少233但是感觉仍然没有ubuntu的apt-get好用）</p>
+
+<h2>配置sublime2</h2>
+
+<p>用来打开sublime2的sh</p>
+
+<figure class='code'><figcaption><span>opennote.sh </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>open -a Sublime<span class="se">\ </span>Text<span class="se">\ </span><span class="m">2</span> <span class="nv">$@</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>修改一下rakefile</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;now use sublime2 open :</span><span class="si">#{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;sh opennote.sh </span><span class="si">#{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ok你可以试一下应该不成问题，然后就是配置一些参数什么的就按之前的就好</p>
+
+<h2>配置ssh</h2>
+
+<p>这里我碰到了一个严重的问题，clip不能用，xclip也米有用，最后找到了mac其实用的是pbcopy</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ssh-keygen -t rsa -C <span class="s2">&quot;yourname@github.com&quot;</span>
+</span><span class='line'>pbcopy &lt; ~/.ssh/id_rsa.pub
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后把这货扔到github上</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ssh -T git@github.com
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>测试一下</p>
+
+<p>如果提示是如下字符串，就表明ssh配置已经成功了</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Hi yourname! You<span class="err">&#39;</span>ve successfully authenticated, but GitHub does not provide shell access.
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+		
+		
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -1042,96 +1178,6 @@ so，我把最初的js的版本放弃了。</p>
 
 		
 		<a href="/blog/2016/02/27/markdown-refer/" class="more-link">Read on &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-	
-	  
-	
-
-	
-	  
-	
-
-
-修改于：<time datetime="2016-02-29T11:32:34+08:00" class="updated" itemprop="dateModified">2016-02-29</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/angular/'>angular</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2016/02/27/angular-2nd/" itemprop="url">[angular.js]第二章 一个简单的购物车范例(1)</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<blockquote><p>千里之行，始于足下</p></blockquote>
-
-<h1>angular.js 基础范例简单购物车</h1>
-
-<h2>设计思路</h2>
-
-<p>首先我们需要从mvc上对本次购物车实例进行分析</p>
-
-<ul>
-<li>模型</li>
-<li>视图（也可以叫模板）</li>
-<li>控制器</li>
-</ul>
-
-
-<h2>模型</h2>
-
-<p>首先值得分析的是模型：</p>
-
-<p>每一个购物车都需要以下属性</p>
-
-<ul>
-<li>id（这个唯一的属性将会被持久化到服务器，并作为购物的唯一标识）</li>
-<li>物品
-
-<ul>
-<li>物品ID （这个唯一的属性将会被用来标示物品）</li>
-<li>物品名称</li>
-<li>物品数量</li>
-<li>物品价格</li>
-<li>物品的优惠和折扣
-
-<ul>
-<li>优惠</li>
-<li>折扣</li>
-</ul>
-</li>
-<li>物品的来源(记录来源的ID)</li>
-</ul>
-</li>
-<li>提交日期</li>
-<li>总价格
-
-<ul>
-<li>物品原价</li>
-<li>折扣后价格</li>
-</ul>
-</li>
-</ul>
-
-
-
-		
-		<a href="/blog/2016/02/27/angular-2nd/" class="more-link">Read on &rarr;</a>
 	</div>
 
 </article>

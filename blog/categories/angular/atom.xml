@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Angular | icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/blog/categories/angular/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-05-02T16:31:17+08:00</updated>
+  <updated>2016-05-16T12:36:07+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -1138,7 +1138,7 @@ ng-hide=&ldquo;boolean&rdquo;</p></blockquote>
 </span><span class='line'>        <span class="nt">&lt;p&gt;</span>你需要订购的数量为：<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;number&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;mount&quot;</span> <span class="nt">/&gt;&lt;/p&gt;</span>
 </span><span class='line'>        <span class="nt">&lt;button</span> <span class="na">ng-click=</span><span class="s">&quot;addItemIntoCart()&quot;</span><span class="nt">&gt;&lt;h1&gt;</span>加入购物车<span class="nt">&lt;/h1&gt;&lt;/button&gt;</span>
 </span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>
+</span><span class='line'>    
 </span><span class='line'><span class="nt">&lt;/div&gt;</span>
 </span><span class='line'>
 </span><span class='line'>

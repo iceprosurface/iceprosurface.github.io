@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Mac | icepro`s Blog]]></title>
+  <link href="http://iceprosurface.com/blog/categories/mac/atom.xml" rel="self"/>
+  <link href="http://iceprosurface.com/"/>
+  <updated>2016-05-16T12:36:07+08:00</updated>
+  <id>http://iceprosurface.com/</id>
+  <author>
+    <name><![CDATA[icepro]]></name>
+    <email><![CDATA[iceprosurface@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[[Mac]换了一台新电脑]]></title>
+    <link href="http://iceprosurface.com/blog/2016/05/16/mac-use/"/>
+    <updated>2016-05-16T11:19:46+08:00</updated>
+    <id>http://iceprosurface.com/blog/2016/05/16/mac-use</id>
+    <content type="html"><![CDATA[<blockquote><p>换了一台新电脑，这篇文章只是测试一下是否可以使用并记录一下mac上的配置</p></blockquote>
+
+<h2>配置ruby和gem</h2>
+
+<p>首先要配置homebrew，这里就不多说了直接上官网就好
+由于我有之前的文档备份就不用从github上面啦了，不过ssh没有保存，所以重新设置一下就好
+gem是自带的不用配置，不过呢国内的环境你懂的，我们得配置淘宝源
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>brew install rbenv&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;先安装apple gcc 否则无法编译&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;brew install apple-gcc42
+</span><span class='line'>rbenv install 1.9.3-p0&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;这里需要给gem目录权限，应该给755的不过自用直接给777了&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;sudo chmod -R <span class="m">777</span> /Library/Ruby/Gems/2.0.0
+</span><span class='line'>gem <span class="nb">source</span> -a &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://mirrors.aliyun.com/rubygems/&quot;</span>&gt;http://mirrors.aliyun.com/rubygems/&lt;/a&gt;
+</span><span class='line'>gem <span class="nb">source</span> -r &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;https://rubygems.org/&quot;</span>&gt;https://rubygems.org/&lt;/a&gt;
+</span><span class='line'>gem install bundler
+</span><span class='line'>rbenv rehash
+</span><span class='line'><span class="nb">cd</span> /octopress/
+</span><span class='line'>bundler install
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>这个时候你会发现还是装不了全是connect fail
+然后我们惯例替换成淘宝源
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle config mirror.&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;https://rubygems.org&quot;</span>&gt;https://rubygems.org&lt;/a&gt; &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;https://ruby.taobao.org&quot;</span>&gt;https://ruby.taobao.org&lt;/a&gt;
+</span><span class='line'>bundle install
+</span></code></pre></td></tr></table></div></figure>
+octopress配置好了（比win简单不少233但是感觉仍然没有ubuntu的apt-get好用）</p>
+
+<h2>配置sublime2</h2>
+
+<p>用来打开sublime2的sh
+<figure class='code'><figcaption><span>opennote.sh </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;!/bin/bash&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;open -a Sublime<span class="se">\ </span>Text<span class="se">\ </span><span class="m">2</span> <span class="nv">$@</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>修改一下rakefile
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">puts</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">now</span> <span class="n">use</span> <span class="n">sublime2</span> <span class="nb">open</span> <span class="p">:</span><span class="c1">#{filename}&amp;rdquo;</span>
+</span><span class='line'>  <span class="nb">system</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">sh</span> <span class="n">opennote</span><span class="o">.</span><span class="n">sh</span> <span class="c1">#{filename}&amp;rdquo;</span>
+</span></code></pre></td></tr></table></div></figure>
+ok你可以试一下应该不成问题，然后就是配置一些参数什么的就按之前的就好</p>
+
+<h2>配置ssh</h2>
+
+<p>这里我碰到了一个严重的问题，clip不能用，xclip也米有用，最后找到了mac其实用的是pbcopy
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ssh-keygen -t rsa -C <span class="p">&amp;</span>ldquo<span class="p">;</span>&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;&amp;#x6d;&amp;#x61;&amp;#x69;&amp;#x6c;&amp;#x74;&amp;#x6f;&amp;#58;&amp;#x79;&amp;#111;&amp;#x75;&amp;#114;&amp;#110;&amp;#97;&amp;#x6d;&amp;#101;&amp;#x40;&amp;#103;&amp;#x69;&amp;#x74;&amp;#x68;&amp;#117;&amp;#98;&amp;#x2e;&amp;#99;&amp;#111;&amp;#x6d;&quot;</span>&gt;<span class="p">&amp;</span><span class="c">#x79;&amp;#x6f;&amp;#x75;&amp;#x72;&amp;#x6e;&amp;#97;&amp;#109;&amp;#101;&amp;#64;&amp;#x67;&amp;#x69;&amp;#116;&amp;#104;&amp;#117;&amp;#x62;&amp;#46;&amp;#99;&amp;#x6f;&amp;#x6d;&lt;/a&gt;&amp;rdquo;</span>
+</span><span class='line'>pbcopy <span class="p">&amp;</span>lt<span class="p">;</span> ~/.ssh/id_rsa.pub
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>然后把这货扔到github上
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ssh -T &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;&amp;#109;&amp;#x61;&amp;#x69;&amp;#x6c;&amp;#116;&amp;#x6f;&amp;#58;&amp;#103;&amp;#105;&amp;#116;&amp;#64;&amp;#103;&amp;#x69;&amp;#x74;&amp;#x68;&amp;#117;&amp;#x62;&amp;#46;&amp;#99;&amp;#x6f;&amp;#109;&quot;</span>&gt;<span class="p">&amp;</span><span class="c">#103;&amp;#x69;&amp;#116;&amp;#64;&amp;#x67;&amp;#x69;&amp;#x74;&amp;#x68;&amp;#x75;&amp;#98;&amp;#46;&amp;#99;&amp;#111;&amp;#x6d;&lt;/a&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+测试一下</p>
+
+<p>如果提示是如下字符串，就表明ssh配置已经成功了
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Hi yourname! You<span class="p">&amp;</span>rsquo<span class="p">;</span>ve successfully authenticated, but GitHub does not provide shell access.
+</span></code></pre></td></tr></table></div></figure></p>
+]]></content>
+  </entry>
+  
+</feed>

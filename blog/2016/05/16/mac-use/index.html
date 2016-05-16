@@ -1,0 +1,279 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>[mac]换了一台新电脑 - icepro`s Blog</title>
+	<meta name="author" content="icepro">
+
+	
+	<meta name="description" content="[Mac]换了一台新电脑 由icepro发布 | 发布于：2016-05-16 换了一台新电脑，这篇文章只是测试一下是否可以使用并记录一下mac上的配置 配置ruby和gem 首先要配置homebrew，这里就不多说了直接上官网就好
+由于我有之前的文档备份就不用从github上面啦了， &hellip;">
+	
+	<meta name="baidu-site-verification" content="pBXjf7BJLg" />
+	<meta name="google-site-verification" content="r3wiHKHws1s6_Kpzd9mmqykNvbEAwnUf5KqI8UI3aDs" />
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="icepro`s Blog" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://iceprosurface.com/blog/2016/05/16/mac-use/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="/javascripts/libs/jquery.min.js"></script>
+	<!-- cant be use in china <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		document.write("<img src='https://avatars.githubusercontent.com/iceprosurface' alt='Profile Picture' style='width: 160px;' />");
+	</script>
+</div>
+<h1><a href="/">icepro`s Blog</a></h1>
+<p class="subtitle">懒惰的后端程序员，不务正业学习前端中</p>
+<p class="subtitle"> <a href="mailto:iceprosurface@gmail.com" >iceprosurface@gmail.com</a></p>
+<nav id="main-nav"><ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+		
+		
+		<a class="github" href="https://github.com/iceprosurface" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+<hgroup>
+  <h1><a href="/">icepro`s Blog</a></h1>
+  
+    <h2>懒惰的后端程序员，不务正业学习前端中</h2>
+  
+</hgroup>
+
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">[Mac]换了一台新电脑</h1>
+	<hr/>
+	<div class="title-author" style="text-align: right;">
+  
+
+<span class="byline author vcard">由<span class="fn">icepro</span>发布</span>
+|
+
+
+
+
+
+
+
+
+	
+	  发布于：2016-05-16
+	
+	
+	
+
+</div>
+	<div class="entry-content" itemprop="articleBody"><blockquote><p>换了一台新电脑，这篇文章只是测试一下是否可以使用并记录一下mac上的配置</p></blockquote>
+
+<h2>配置ruby和gem</h2>
+
+<p>首先要配置homebrew，这里就不多说了直接上官网就好
+由于我有之前的文档备份就不用从github上面啦了，不过ssh没有保存，所以重新设置一下就好
+gem是自带的不用配置，不过呢国内的环境你懂的，我们得配置淘宝源</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>brew install rbenv
+</span><span class='line'><span class="c">#先安装apple gcc 否则无法编译</span>
+</span><span class='line'>brew install apple-gcc42
+</span><span class='line'>rbenv install 1.9.3-p0
+</span><span class='line'><span class="c"># 这里需要给gem目录权限，应该给755的不过自用直接给777了</span>
+</span><span class='line'>sudo chmod -R <span class="m">777</span> /Library/Ruby/Gems/2.0.0
+</span><span class='line'>gem <span class="nb">source</span> -a http://mirrors.aliyun.com/rubygems/
+</span><span class='line'>gem <span class="nb">source</span> -r https://rubygems.org/
+</span><span class='line'>gem install bundler
+</span><span class='line'>rbenv rehash
+</span><span class='line'><span class="nb">cd</span> /octopress/
+</span><span class='line'>bundler install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个时候你会发现还是装不了全是connect fail
+然后我们惯例替换成淘宝源</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bundle config mirror.https://rubygems.org https://ruby.taobao.org
+</span><span class='line'>bundle install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>octopress配置好了（比win简单不少233但是感觉仍然没有ubuntu的apt-get好用）</p>
+
+<h2>配置sublime2</h2>
+
+<p>用来打开sublime2的sh</p>
+
+<figure class='code'><figcaption><span>opennote.sh </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>open -a Sublime<span class="se">\ </span>Text<span class="se">\ </span><span class="m">2</span> <span class="nv">$@</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>修改一下rakefile</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;now use sublime2 open :</span><span class="si">#{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="nb">system</span> <span class="s2">&quot;sh opennote.sh </span><span class="si">#{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ok你可以试一下应该不成问题，然后就是配置一些参数什么的就按之前的就好</p>
+
+<h2>配置ssh</h2>
+
+<p>这里我碰到了一个严重的问题，clip不能用，xclip也米有用，最后找到了mac其实用的是pbcopy</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ssh-keygen -t rsa -C <span class="s2">&quot;yourname@github.com&quot;</span>
+</span><span class='line'>pbcopy &lt; ~/.ssh/id_rsa.pub
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后把这货扔到github上</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ssh -T git@github.com
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>测试一下</p>
+
+<p>如果提示是如下字符串，就表明ssh配置已经成功了</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Hi yourname! You<span class="err">&#39;</span>ve successfully authenticated, but GitHub does not provide shell access.
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+	<!-- 这临时用来解决双括号与系统设定冲突问题 -->
+	<script>
+		$(document).ready(function(){ 
+			$(".ni").each(function(){
+			  $(this).html($(this).html().replace(/&amp;#125;/g,'}'));
+			  $(this).html($(this).html().replace(/&amp;#123;/g,'{'));
+			});
+		});
+	</script>
+	<!-- 百度爬虫抓取 -->
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		bp.src = '//push.zhanzhang.baidu.com/push.js';
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+</article>
+
+	<div class="share">
+	<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a><a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a><a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a><a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a><a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a><a title="分享到QQ好友" href="#" class="bds_sqq" data-cmd="sqq"></a><a title="分享到复制网址" href="#" class="bds_copy" data-cmd="copy"></a></div>
+	<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+</div>
+
+
+
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="/blog/2016/05/16/mac-use" data-title="[mac]换了一台新电脑" data-url="icepro/blog/2016/05/16/mac-use/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"icepro"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
+<!-- 多说公共JS代码 end -->
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright &copy; 2016 - icepro -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+			<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+
+		</div>
+	</div>
+</body>
+</html>

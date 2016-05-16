@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | icepro`s Blog]]></title>
   <link href="http://iceprosurface.com/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://iceprosurface.com/"/>
-  <updated>2016-05-02T16:31:17+08:00</updated>
+  <updated>2016-05-16T12:36:07+08:00</updated>
   <id>http://iceprosurface.com/</id>
   <author>
     <name><![CDATA[icepro]]></name>
@@ -71,11 +71,11 @@
 </span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;tab-control&quot;</span><span class="nt">&gt;</span>
 </span><span class='line'>        <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;tabs&quot;</span><span class="nt">&gt;</span>
 </span><span class='line'>            <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;active&quot;</span> <span class="na">data-id=</span><span class="s">&quot;x1&quot;</span><span class="nt">&gt;</span>我是第一个特别长的标签<span class="nt">&lt;/li&gt;</span>
-</span><span class='line'>
+</span><span class='line'>                
 </span><span class='line'>            <span class="nt">&lt;li</span> <span class="na">data-id=</span><span class="s">&quot;x2&quot;</span><span class="nt">&gt;</span>我是第二个特别长的标签<span class="nt">&lt;/li&gt;</span>
-</span><span class='line'>
+</span><span class='line'>                
 </span><span class='line'>            <span class="nt">&lt;li</span> <span class="na">data-id=</span><span class="s">&quot;x3&quot;</span><span class="nt">&gt;</span>我是第三个特别长的标签<span class="nt">&lt;/li&gt;</span>
-</span><span class='line'>
+</span><span class='line'>                
 </span><span class='line'>            <span class="nt">&lt;li</span> <span class="na">data-id=</span><span class="s">&quot;x4&quot;</span><span class="nt">&gt;</span>我是第四个特别长的标签<span class="nt">&lt;/li&gt;</span>
 </span><span class='line'>        <span class="nt">&lt;/ul&gt;</span>
 </span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
@@ -582,7 +582,7 @@
 </span><span class='line'><span class="kd">var</span> <span class="nx">reCalculate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">nowtime</span><span class="p">){</span>
 </span><span class='line'>    <span class="nx">nowtime</span> <span class="o">=</span> <span class="s2">&quot;[&quot;</span><span class="o">+</span><span class="nx">nowtime</span><span class="o">+</span><span class="s2">&quot;]&quot;</span><span class="p">;</span>
 </span><span class='line'>    <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">lrcs</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="nx">item</span><span class="p">){</span>
-</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="nx">nowtime</span><span class="p">.</span><span class="nx">localeCompare</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">time</span><span class="p">)</span><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="nx">nowtime</span><span class="p">.</span><span class="nx">localeCompare</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">time</span><span class="p">)</span><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
 </span><span class='line'>            <span class="k">return</span> <span class="p">(</span><span class="nx">nowPlay</span> <span class="o">=</span> <span class="p">(</span><span class="nx">i</span><span class="o">-</span><span class="mi">1</span><span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="mi">0</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">i</span><span class="o">-</span><span class="mi">1</span><span class="p">));</span>
 </span><span class='line'>    <span class="p">});</span>
 </span><span class='line'><span class="p">}</span>
@@ -890,18 +890,18 @@
 </span><span class='line'><span class="c1">// 停止</span>
 </span><span class='line'><span class="kd">var</span> <span class="nx">stop</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
 </span><span class='line'>    <span class="c1">// 设置当前播放状态</span>
-</span><span class='line'>    <span class="nx">playing</span> <span class="o">=</span> <span class="kc">false</span> <span class="p">;</span>
+</span><span class='line'>    <span class="nx">playing</span> <span class="o">=</span> <span class="kc">false</span> <span class="p">;</span>   
 </span><span class='line'>    <span class="nx">media</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// 设置播放</span>
 </span><span class='line'><span class="kd">var</span> <span class="nx">setSrc</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">url</span><span class="p">){</span>
-</span><span class='line'>    <span class="nx">media</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="nx">url</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">media</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="nx">url</span><span class="p">;</span> 
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// 获得播放</span>
 </span><span class='line'><span class="kd">var</span> <span class="nx">getSrc</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">media</span><span class="p">.</span><span class="nx">src</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">media</span><span class="p">.</span><span class="nx">src</span><span class="p">;</span> 
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">// 开始新曲目</span>
