@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Bash | icepro`s Blog]]></title>
+  <link href="http://iceprosurface.com/blog/categories/bash/atom.xml" rel="self"/>
+  <link href="http://iceprosurface.com/"/>
+  <updated>2016-05-17T21:34:10+08:00</updated>
+  <id>http://iceprosurface.com/</id>
+  <author>
+    <name><![CDATA[icepro]]></name>
+    <email><![CDATA[iceprosurface@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[[Mac]如何让mac挂在ntfs的u盘]]></title>
+    <link href="http://iceprosurface.com/blog/2016/05/17/mac-ntfs/"/>
+    <updated>2016-05-17T21:10:14+08:00</updated>
+    <id>http://iceprosurface.com/blog/2016/05/17/mac-ntfs</id>
+    <content type="html"><![CDATA[<p>本人最近需要copy一份文件，最为一个忠实的ubunut fans 我是不会把u盘化成ntfs的，原因很简单，说不定哪天就要用内核登陆，到时候我可不一定能成功挂在ntfs，但是fat32至少是可以使用，不过我的小伙伴可不会这么办，于是我的os x对他的盘只能看不能写了。</p>
+
+<h2>某IT工程师的发现</h2>
+
+<p>百度了一下已经有<strong>结局方案了</strong>，简单的使用命令就可以了。
+首先，在使用u盘前先
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ls /dev <span class="p">|</span> grep disk
+</span></code></pre></td></tr></table></div></figure>
+这是用来<em>筛选disk的</em>，插入u盘后再看一下多出来的那个就是u盘，我们把它挂载就能读+写了
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>diskutil info /dev/<span class="nv">$i</span> <span class="p">|</span> grep <span class="p">&amp;</span>ldquo<span class="p">;</span>Volume Name<span class="p">&amp;</span>rdquo<span class="p">;</span>
+</span><span class='line'>diskutil info /Volumes/xxxx <span class="p">|</span> grep UUID&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;uuid 就是上面的那个uuid&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;echo <span class="p">&amp;</span>ldquo<span class="p">;</span><span class="nv">UUID</span><span class="o">=</span>uuid none ntfs rw,auto,nobrowse<span class="p">&amp;</span>rdquo<span class="p">;</span> <span class="p">|</span> sudo tee -a /etc/fstab
+</span></code></pre></td></tr></table></div></figure>
+这个是第一种方法了假设你知道volume name可以省略第一步</p>
+
+<h2>第二种方法</h2>
+
+<p>这种方法是基于上面启发的，我们可以尝试挂载到别的地方
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ls /dev <span class="p">|</span> grep disk
+</span><span class='line'>ls /dev <span class="p">|</span> grep disk&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;老样子看两次&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;VOLUME<span class="o">=</span>&lt;code&gt;diskutil info /dev/disk2s1 <span class="p">|</span> grep <span class="s2">&quot;Volume Name&quot;</span> <span class="p">|</span> awk <span class="s1">&#39;{print $3}&#39;</span>&lt;/code&gt;
+</span><span class='line'>sudo mount -t ntfs -o noowners,nodev,nobrowse,noatime,rw /dev/disk2s1 /Users/iceprosurface/Desktop/<span class="k">${</span><span class="nv">VOLUME</span><span class="k">}</span>
+</span></code></pre></td></tr></table></div></figure>
+挂载桌面同名文件上</p>
+]]></content>
+  </entry>
+  
+</feed>

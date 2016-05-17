@@ -1,0 +1,225 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>[mac]如何让mac挂在ntfs的u盘 - icepro`s Blog</title>
+	<meta name="author" content="icepro">
+
+	
+	<meta name="description" content="[Mac]如何让mac挂在ntfs的u盘 由icepro发布 | 发布于：2016-05-17 本人最近需要copy一份文件，最为一个忠实的ubunut fans 我是不会把u盘化成ntfs的，原因很简单，说不定哪天就要用内核登陆，到时候我可不一定能成功挂在ntfs，但是fat32至少是可以使用 &hellip;">
+	
+	<meta name="baidu-site-verification" content="pBXjf7BJLg" />
+	<meta name="google-site-verification" content="r3wiHKHws1s6_Kpzd9mmqykNvbEAwnUf5KqI8UI3aDs" />
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="icepro`s Blog" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://iceprosurface.com/blog/2016/05/17/mac-ntfs/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="/javascripts/libs/jquery.min.js"></script>
+	<!-- cant be use in china <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		document.write("<img src='https://avatars.githubusercontent.com/iceprosurface' alt='Profile Picture' style='width: 160px;' />");
+	</script>
+</div>
+<h1><a href="/">icepro`s Blog</a></h1>
+<p class="subtitle">懒惰的后端程序员，不务正业学习前端中</p>
+<p class="subtitle"> <a href="mailto:iceprosurface@gmail.com" >iceprosurface@gmail.com</a></p>
+<nav id="main-nav"><ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+		
+		
+		<a class="github" href="https://github.com/iceprosurface" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+<hgroup>
+  <h1><a href="/">icepro`s Blog</a></h1>
+  
+    <h2>懒惰的后端程序员，不务正业学习前端中</h2>
+  
+</hgroup>
+
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">[Mac]如何让mac挂在ntfs的u盘</h1>
+	<hr/>
+	<div class="title-author" style="text-align: right;">
+  
+
+<span class="byline author vcard">由<span class="fn">icepro</span>发布</span>
+|
+
+
+
+
+
+
+
+
+	
+	  发布于：2016-05-17
+	
+	
+	
+
+</div>
+	<div class="entry-content" itemprop="articleBody"><p>本人最近需要copy一份文件，最为一个忠实的ubunut fans 我是不会把u盘化成ntfs的，原因很简单，说不定哪天就要用内核登陆，到时候我可不一定能成功挂在ntfs，但是fat32至少是可以使用，不过我的小伙伴可不会这么办，于是我的os x对他的盘只能看不能写了。</p>
+
+<h2>某IT工程师的发现</h2>
+
+<p>百度了一下已经有<strong>结局方案了</strong>，简单的使用命令就可以了。
+首先，在使用u盘前先</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ls /dev <span class="p">|</span> grep disk
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这是用来<em>筛选disk的</em>，插入u盘后再看一下多出来的那个就是u盘，我们把它挂载就能读+写了</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>diskutil info /dev/<span class="nv">$i</span> <span class="p">|</span> grep <span class="s2">&quot;Volume Name&quot;</span>
+</span><span class='line'>diskutil info /Volumes/xxxx <span class="p">|</span> grep UUID
+</span><span class='line'><span class="c">#uuid 就是上面的那个uuid</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;UUID=uuid none ntfs rw,auto,nobrowse&quot;</span> <span class="p">|</span> sudo tee -a /etc/fstab
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个是第一种方法了假设你知道volume name可以省略第一步</p>
+
+<h2>第二种方法</h2>
+
+<p>这种方法是基于上面启发的，我们可以尝试挂载到别的地方</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ls /dev <span class="p">|</span> grep disk
+</span><span class='line'>ls /dev <span class="p">|</span> grep disk
+</span><span class='line'><span class="c">#老样子看两次</span>
+</span><span class='line'><span class="nv">VOLUME</span><span class="o">=</span><span class="sb">`</span>diskutil info /dev/disk2s1 <span class="p">|</span> grep <span class="s2">&quot;Volume Name&quot;</span> <span class="p">|</span> awk <span class="s1">&#39;{print $3}&#39;</span><span class="sb">`</span>
+</span><span class='line'>sudo mount -t ntfs -o noowners,nodev,nobrowse,noatime,rw /dev/disk2s1 /Users/iceprosurface/Desktop/<span class="k">${</span><span class="nv">VOLUME</span><span class="k">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>挂载桌面同名文件上</p>
+</div>
+	<!-- 这临时用来解决双括号与系统设定冲突问题 -->
+	<script>
+		$(document).ready(function(){ 
+			$(".ni").each(function(){
+			  $(this).html($(this).html().replace(/&amp;#125;/g,'}'));
+			  $(this).html($(this).html().replace(/&amp;#123;/g,'{'));
+			});
+		});
+	</script>
+	<!-- 百度爬虫抓取 -->
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		bp.src = '//push.zhanzhang.baidu.com/push.js';
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+</article>
+
+	<div class="share">
+	<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a><a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a><a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a><a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a><a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a><a title="分享到QQ好友" href="#" class="bds_sqq" data-cmd="sqq"></a><a title="分享到复制网址" href="#" class="bds_copy" data-cmd="copy"></a></div>
+	<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+</div>
+
+
+
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="/blog/2016/05/17/mac-ntfs" data-title="[mac]如何让mac挂在ntfs的u盘" data-url="icepro/blog/2016/05/17/mac-ntfs/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"icepro"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
+<!-- 多说公共JS代码 end -->
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright &copy; 2016 - icepro -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+			<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+
+		</div>
+	</div>
+</body>
+</html>
