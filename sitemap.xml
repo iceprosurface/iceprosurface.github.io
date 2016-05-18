@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://iceprosurface.com/blog/2016/05/18/howtovpn/</loc>
+<lastmod>2016-05-18T19:49:38+08:00</lastmod>
+</url>
+<url>
+<loc>http://iceprosurface.com/blog/2016/05/18/chromosome/</loc>
+<lastmod>2016-05-18T12:24:12+08:00</lastmod>
+</url>
+<url>
 <loc>http://iceprosurface.com/blog/2016/05/17/mac-ntfs/</loc>
 <lastmod>2016-05-17T21:10:14+08:00</lastmod>
 </url>
@@ -91,6 +99,12 @@
 </url>
 <url>
 <loc>http://iceprosurface.com/blog/categories/bash/</loc>
+</url>
+<url>
+<loc>http://iceprosurface.com/blog/categories/vps/</loc>
+</url>
+<url>
+<loc>http://iceprosurface.com/blog/categories/linux/</loc>
 </url>
 <url>
 <loc>http://iceprosurface.com/404.html</loc>

@@ -1,0 +1,238 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>[js]icepro的遗传算法解析 - icepro`s Blog</title>
+	<meta name="author" content="icepro">
+
+	
+	<meta name="description" content="[Js]icepro的遗传算法解析 由icepro发布 | 发布于：2016-05-18 |修改于：2016-05-18 1 起因 这次为什么会突然提起遗传算法呢？主要是因为这次光光的学姐询问了一个关于多旅行商的MTPS问题，对此我没有做过这方面的研究，我最多做过的是一个单旅行商的TPS问题， &hellip;">
+	
+	<meta name="baidu-site-verification" content="pBXjf7BJLg" />
+	<meta name="google-site-verification" content="r3wiHKHws1s6_Kpzd9mmqykNvbEAwnUf5KqI8UI3aDs" />
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="icepro`s Blog" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://iceprosurface.com/blog/2016/05/18/chromosome/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="/javascripts/libs/jquery.min.js"></script>
+	<!-- cant be use in china <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		document.write("<img src='https://avatars.githubusercontent.com/iceprosurface' alt='Profile Picture' style='width: 160px;' />");
+	</script>
+</div>
+<h1><a href="/">icepro`s Blog</a></h1>
+<p class="subtitle">懒惰的后端程序员，不务正业学习前端中</p>
+<p class="subtitle"> <a href="mailto:iceprosurface@gmail.com" >iceprosurface@gmail.com</a></p>
+<nav id="main-nav"><ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+		
+		
+		<a class="github" href="https://github.com/iceprosurface" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+<hgroup>
+  <h1><a href="/">icepro`s Blog</a></h1>
+  
+    <h2>懒惰的后端程序员，不务正业学习前端中</h2>
+  
+</hgroup>
+
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">[Js]icepro的遗传算法解析</h1>
+	<hr/>
+	<div class="title-author" style="text-align: right;">
+  
+
+<span class="byline author vcard">由<span class="fn">icepro</span>发布</span>
+|
+
+
+
+
+
+
+
+
+	
+	  发布于：2016-05-18
+	
+	
+	
+	  |修改于：2016-05-18
+	
+
+</div>
+	<div class="entry-content" itemprop="articleBody"><h3>1 起因</h3>
+
+<p>这次为什么会突然提起遗传算法呢？主要是因为这次光光的学姐询问了一个关于多旅行商的MTPS问题，对此我没有做过这方面的研究，我最多做过的是一个单旅行商的TPS问题，这样一个多旅行商的多目标求最优解的方法还从未接触过，不过作为一个忠实的研究者，并不介意挑战来的有难度一点。</p>
+
+<!-- more -->
+
+
+<h3>2 以前的算法</h3>
+
+<p>说起遗传算法，很久以前也玩过遗传算法，拿来做一下有意思的事情，比如当时我就做过一个图像的算法，拿一些<em>随机的多边形</em>，拼出一个图案，当时选的是火狐的图像，不过做了一些处理。</p>
+
+<p>首先把火狐的图片切割成16<em>16的区块，每一个区块取出色块的平均数，然后就认为这一块的颜色就是这个平均数的颜色，然后将拼凑出的图像，按照同样的规则求出每一个区块，并计算匹配率（方差的倒数</em>10000）。</p>
+
+<p>然后很遗憾的是，最后的图像误差是挺大的，当时跑了大概400代不是很多，不过可见的是值已经快速收敛了，但是可见的是结果不会再有更好的解决了。</p>
+
+<p>然而令我不怎么开心的是这个实验是我高中的时候使用的，那时候的电脑已经摔坏了，悲剧的是，那时候我还没开始使用github，结局就是，数据已经灰飞烟灭了。</p>
+
+<p>当时用的C语言吧，不过现在么我早就忘记C语言的语法了，还是那且算了吧，而且C语言对我来说一直都是噩梦般的存在，现在我当然不会再尝试去用C语言写这个了。</p>
+
+<h3>3 遗传算法概述</h3>
+
+<blockquote><p>遗传算法是一种常见的搜索算法，为什么说是一种搜索算法呢？</p></blockquote>
+
+<p>那很简单因为遗传算法是在一个很大的解集里面，输入一个优势解集，然后通过这个优势解集去搜索和这个优势解集相关且有优势的其他解集，然后这些解就生成了一个有效的解集集合，他们对应的有各自的适应度（解），然后我们通过赌轮盘的方式，让适应度大的解能够被遗传下来，让适应度低的被淘汰。</p>
+
+<p>而其中搜索算法就是交叉算子，变异算子，通过类似于遗传学中交叉和变异的操作来完成遗传保留优势基因，通过变异来寻找其他的可能解。</p>
+
+<h3>4 遗传算法</h3>
+
+<h4>4.1 遗传算法的编码设计</h4>
+
+<h5>A 二进制编码</h5>
+
+<p>遗传算法最常见的编码方式就是二进制编码，比如 ：(2,1)</p>
+
+<p>两个10进制数可以使用6位二进制码来表述：010001;</p>
+
+<p>这是最常见的编码方式，通常的函数求近似最优解的时候都会使用这种编码方式。</p>
+
+<h5>B 数字编码方式</h5>
+
+<p>这种编码方式的名字可能不太正确，这种编码通常用于TPS问题</p>
+
+<p>比如某旅行商需要途经123456789点，每个点距离其他点的距离都不相同，假设旅行商从0开始，求旅行商总路程最短的方案。</p>
+
+<p>使用这种编码可以有效解决上述二进制编码交叉时的问题，当然交叉算法也需要作出一定的调整。</p>
+
+<h5>C 字符代号方式</h5>
+
+<p>这类编码的名字可能还是不太正确，这类编码可以完全表示某种含义，不过同样的其算法需要特殊设计。</p>
+
+<h4>4.2 交叉算子的设计</h4>
+
+<h5>A</h5>
+
+<blockquote><p>代码是写好了有空继续更新</p></blockquote>
+</div>
+	<!-- 这临时用来解决双括号与系统设定冲突问题 -->
+	<script>
+		$(document).ready(function(){ 
+			$(".ni").each(function(){
+			  $(this).html($(this).html().replace(/&amp;#125;/g,'}'));
+			  $(this).html($(this).html().replace(/&amp;#123;/g,'{'));
+			});
+		});
+	</script>
+	<!-- 百度爬虫抓取 -->
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		bp.src = '//push.zhanzhang.baidu.com/push.js';
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+</article>
+
+	<div class="share">
+	<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a><a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a><a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a><a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a><a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a><a title="分享到QQ好友" href="#" class="bds_sqq" data-cmd="sqq"></a><a title="分享到复制网址" href="#" class="bds_copy" data-cmd="copy"></a></div>
+	<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+</div>
+
+
+
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="/blog/2016/05/18/chromosome" data-title="[js]icepro的遗传算法解析" data-url="icepro/blog/2016/05/18/chromosome/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"icepro"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
+<!-- 多说公共JS代码 end -->
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright &copy; 2016 - icepro -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+			<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+
+		</div>
+	</div>
+</body>
+</html>

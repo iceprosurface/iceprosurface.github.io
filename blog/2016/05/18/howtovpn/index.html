@@ -1,0 +1,296 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>[vps]如何优雅使用vps给你提供特殊服务(科学上网) - icepro`s Blog</title>
+	<meta name="author" content="icepro">
+
+	
+	<meta name="description" content="[Vps]如何优雅使用vps给你提供特殊服务(科学上网) 由icepro发布 | 发布于：2016-05-18 1. 介于喜欢自用的产物 最近写文的次数高产似那啥？= =不提这个啦~ 作为一个忠实的轮子制造者，我当然不介意在能够使用一些东西情况下在手动配置一份private版本的东西。 &hellip;">
+	
+	<meta name="baidu-site-verification" content="pBXjf7BJLg" />
+	<meta name="google-site-verification" content="r3wiHKHws1s6_Kpzd9mmqykNvbEAwnUf5KqI8UI3aDs" />
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="icepro`s Blog" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://iceprosurface.com/blog/2016/05/18/howtovpn/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="/javascripts/libs/jquery.min.js"></script>
+	<!-- cant be use in china <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		document.write("<img src='https://avatars.githubusercontent.com/iceprosurface' alt='Profile Picture' style='width: 160px;' />");
+	</script>
+</div>
+<h1><a href="/">icepro`s Blog</a></h1>
+<p class="subtitle">懒惰的后端程序员，不务正业学习前端中</p>
+<p class="subtitle"> <a href="mailto:iceprosurface@gmail.com" >iceprosurface@gmail.com</a></p>
+<nav id="main-nav"><ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+		
+		
+		<a class="github" href="https://github.com/iceprosurface" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+<hgroup>
+  <h1><a href="/">icepro`s Blog</a></h1>
+  
+    <h2>懒惰的后端程序员，不务正业学习前端中</h2>
+  
+</hgroup>
+
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">[Vps]如何优雅使用vps给你提供特殊服务(科学上网)</h1>
+	<hr/>
+	<div class="title-author" style="text-align: right;">
+  
+
+<span class="byline author vcard">由<span class="fn">icepro</span>发布</span>
+|
+
+
+
+
+
+
+
+
+	
+	  发布于：2016-05-18
+	
+	
+	
+
+</div>
+	<div class="entry-content" itemprop="articleBody"><h2>1. 介于喜欢自用的产物</h2>
+
+<p>最近写文的次数高产似那啥？= =不提这个啦~</p>
+
+<p>作为一个忠实的轮子制造者，我当然不介意在能够使用一些东西情况下在手动配置一份private版本的东西。</p>
+
+<p>基于这个思路我大抵找到了一份全新的科学上网的方法。</p>
+
+<!-- more -->
+
+
+<p>如果需要傻瓜版本，小白请移步<a href="https://github.com/XX-net/XX-Net" title="xx-net">xx-net</a>
+这里都是配置好的免费GAE版本，基于goagent制作。</p>
+
+<p>假设你和我一样喜欢折腾的大抵可以和我一起看下去了</p>
+
+<h2>2. vps的选购</h2>
+
+<p>vps我没用过，不过虚拟主机还是尝试使用过一下的，此处先购买一个bps，这里我选用了搬瓦工具体内容自己百度也好谷歌也好一堆，不过眼瞎的我没有找好，选了一个固定ip的……然后坑爹的速度更笨不能看tw。</p>
+
+<h2>3. 配置你的vps</h2>
+
+<p>各家的vps配置都大同小异，你需要记下的无非就是ssh登陆的id和端口，此外还有ip。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#host对应你的vps的ip，port对应你的端口</span>
+</span><span class='line'>ssh root@host -p port
+</span><span class='line'><span class="c">#输入密码</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>好了如果很幸运的你发先提示是下面这个</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>root@localhost<span class="o">]</span><span class="nv">$ </span>&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>那么说明你已经登陆成功了，为了科学上网那么鼎鼎大名的shadowsock必不可少</p>
+
+<p>虽然没用过centos不过查了一下好像命令除了改成yum外，没什么区别，那就好办了linux这么多社区直接拉前人的就好了。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#python应该是自带的，我们下工具包就好了，然后用pip自动配置</span>
+</span><span class='line'><span class="c">#都是和npm类似的包管理工具</span>
+</span><span class='line'>yum install python-setuptools <span class="o">&amp;&amp;</span> easy_install pip
+</span><span class='line'>pip install shadowsocks
+</span><span class='line'><span class="c">#这里巴拉巴拉一堆东西你不需要看懂啥，没出现error，fail等字样</span>
+</span><span class='line'><span class="c">#并且看到shadowsocks success就说明已经安装成功了</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>4.配置shadowsock</h2>
+
+<p>为了让vps完成特殊服务我们需要配置一下ss，当然还有其他的选择如openvpn等等等</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vim /etc/shadowsocks.json
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们用vim打开json文件，不用担心，假设没有的话保存的时候自然会生成的，在vim中命令模式下a代表插入，记得这个就好。</p>
+
+<p>进入插入模式后把下列内容复制进去</p>
+
+<figure class='code'><figcaption><span>"/etc/shadowsocks.json" </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;server&quot;</span><span class="p">:</span><span class="s2">&quot;your_server_ip&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;server_port&quot;</span><span class="p">:</span><span class="mi">443</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;local_address&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;local_port&quot;</span><span class="p">:</span><span class="mi">1080</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="s2">&quot;icepro.com&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;timeout&quot;</span><span class="p">:</span><span class="mi">300</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;method&quot;</span><span class="p">:</span><span class="s2">&quot;aes-256-cfb&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;fast_open&quot;</span><span class="p">:</span> <span class="kc">false</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中password就是你要登陆的密码这个需要改，server_port可以改为443，或者默认8388，server填写ip其他的可以懂也可以酌情修改具体配置自行google</p>
+
+<p>接下来按一下esc进入命令模式，然后输入：wq来推出vim模式。</p>
+
+<p>随后</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#执行shadowsock</span>
+</span><span class='line'>ssserver -c /etc/shadowsocks.json -d start
+</span><span class='line'><span class="c">#关闭shadowsock</span>
+</span><span class='line'>ssserver -c /etc/shadowsocks.json -d stop
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>4. 选择对应的客户端程序</h2>
+
+<p>win下直接就是shadowsock，我的是mac osx 所以下下载了shadowsocksx来使用，接下来就可以使用vps愉快的科学上网啦。</p>
+</div>
+	<!-- 这临时用来解决双括号与系统设定冲突问题 -->
+	<script>
+		$(document).ready(function(){ 
+			$(".ni").each(function(){
+			  $(this).html($(this).html().replace(/&amp;#125;/g,'}'));
+			  $(this).html($(this).html().replace(/&amp;#123;/g,'{'));
+			});
+		});
+	</script>
+	<!-- 百度爬虫抓取 -->
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		bp.src = '//push.zhanzhang.baidu.com/push.js';
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+</article>
+
+	<div class="share">
+	<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a><a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a><a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a><a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a><a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a><a title="分享到QQ好友" href="#" class="bds_sqq" data-cmd="sqq"></a><a title="分享到复制网址" href="#" class="bds_copy" data-cmd="copy"></a></div>
+	<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+</div>
+
+
+
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="/blog/2016/05/18/howtovpn" data-title="[vps]如何优雅使用vps给你提供特殊服务(科学上网)" data-url="icepro/blog/2016/05/18/howtovpn/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"icepro"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
+<!-- 多说公共JS代码 end -->
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright &copy; 2016 - icepro -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+			<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+
+		</div>
+	</div>
+</body>
+</html>

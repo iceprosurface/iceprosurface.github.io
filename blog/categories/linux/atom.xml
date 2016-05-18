@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Linux | icepro`s Blog]]></title>
+  <link href="http://iceprosurface.com/blog/categories/linux/atom.xml" rel="self"/>
+  <link href="http://iceprosurface.com/"/>
+  <updated>2016-05-18T20:16:31+08:00</updated>
+  <id>http://iceprosurface.com/</id>
+  <author>
+    <name><![CDATA[icepro]]></name>
+    <email><![CDATA[iceprosurface@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[[Vps]如何优雅使用vps给你提供特殊服务(科学上网)]]></title>
+    <link href="http://iceprosurface.com/blog/2016/05/18/howtovpn/"/>
+    <updated>2016-05-18T19:49:38+08:00</updated>
+    <id>http://iceprosurface.com/blog/2016/05/18/howtovpn</id>
+    <content type="html"><![CDATA[<h2>1. 介于喜欢自用的产物</h2>
+
+<p>最近写文的次数高产似那啥？= =不提这个啦~</p>
+
+<p>作为一个忠实的轮子制造者，我当然不介意在能够使用一些东西情况下在手动配置一份private版本的东西。</p>
+
+<p>基于这个思路我大抵找到了一份全新的科学上网的方法。</p>
+
+<!-- more -->
+
+
+<p>如果需要傻瓜版本，小白请移步<a href="https://github.com/XX-net/XX-Net" title="xx-net">xx-net</a>
+这里都是配置好的免费GAE版本，基于goagent制作。</p>
+
+<p>假设你和我一样喜欢折腾的大抵可以和我一起看下去了</p>
+
+<h2>2. vps的选购</h2>
+
+<p>vps我没用过，不过虚拟主机还是尝试使用过一下的，此处先购买一个bps，这里我选用了搬瓦工具体内容自己百度也好谷歌也好一堆，不过眼瞎的我没有找好，选了一个固定ip的……然后坑爹的速度更笨不能看tw。</p>
+
+<h2>3. 配置你的vps</h2>
+
+<p>各家的vps配置都大同小异，你需要记下的无非就是ssh登陆的id和端口，此外还有ip。</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;host对应你的vps的ip，port对应你的端口&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;ssh root@host -p port&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;输入密码&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>好了如果很幸运的你发先提示是下面这个
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>root@localhost<span class="o">]</span><span class="nv">$ </span>&gt;
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>那么说明你已经登陆成功了，为了科学上网那么鼎鼎大名的shadowsock必不可少</p>
+
+<p>虽然没用过centos不过查了一下好像命令除了改成yum外，没什么区别，那就好办了linux这么多社区直接拉前人的就好了。</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;python应该是自带的，我们下工具包就好了，然后用pip自动配置&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;都是和npm类似的包管理工具&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;yum install python-setuptools <span class="p">&amp;</span>amp<span class="p">;&amp;</span>amp<span class="p">;</span> easy_install pip
+</span><span class='line'>pip install shadowsocks&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;这里巴拉巴拉一堆东西你不需要看懂啥，没出现error，fail等字样&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;并且看到shadowsocks success就说明已经安装成功了&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>4.配置shadowsock</h2>
+
+<p>为了让vps完成特殊服务我们需要配置一下ss，当然还有其他的选择如openvpn等等等</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vim /etc/shadowsocks.json
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>我们用vim打开json文件，不用担心，假设没有的话保存的时候自然会生成的，在vim中命令模式下a代表插入，记得这个就好。</p>
+
+<p>进入插入模式后把下列内容复制进去</p>
+
+<p><figure class='code'><figcaption><span>&ldquo;/etc/shadowsocks.json&rdquo; </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="err">&amp;ldquo;server&amp;rdquo;:&amp;ldquo;your_server_ip&amp;rdquo;,</span>
+</span><span class='line'>    <span class="err">&amp;ldquo;server_port&amp;rdquo;:443,</span>
+</span><span class='line'>    <span class="err">&amp;ldquo;local_address&amp;rdquo;:</span> <span class="err">&amp;ldquo;127.0.0.1&amp;rdquo;,</span>
+</span><span class='line'>    <span class="err">&amp;ldquo;local_port&amp;rdquo;:1080,</span>
+</span><span class='line'>    <span class="err">&amp;ldquo;password&amp;rdquo;:&amp;ldquo;icepro.com&amp;rdquo;,</span>
+</span><span class='line'>    <span class="err">&amp;ldquo;timeout&amp;rdquo;:300,</span>
+</span><span class='line'>    <span class="err">&amp;ldquo;method&amp;rdquo;:&amp;ldquo;aes-256-cfb&amp;rdquo;,</span>
+</span><span class='line'>    <span class="err">&amp;ldquo;fast_open&amp;rdquo;:</span> <span class="err">false</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>其中password就是你要登陆的密码这个需要改，server_port可以改为443，或者默认8388，server填写ip其他的可以懂也可以酌情修改具体配置自行google</p>
+
+<p>接下来按一下esc进入命令模式，然后输入：wq来推出vim模式。</p>
+
+<p>随后
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;执行shadowsock&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;ssserver -c /etc/shadowsocks.json -d start&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;关闭shadowsock&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;ssserver -c /etc/shadowsocks.json -d stop
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>4. 选择对应的客户端程序</h2>
+
+<p>win下直接就是shadowsock，我的是mac osx 所以下下载了shadowsocksx来使用，接下来就可以使用vps愉快的科学上网啦。</p>
+]]></content>
+  </entry>
+  
+</feed>
